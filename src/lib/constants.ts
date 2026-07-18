@@ -43,6 +43,18 @@ export const STATUS_BADGE_CLASSES: Record<Status, string> = {
   CLOSED: "bg-slate-400 text-white",
 };
 
+export const REPORT_REASON_KEYS = [
+  "SPAM",
+  "FALSE",
+  "OFFENSIVE",
+  "SCAM",
+  "OTHER",
+] as const;
+export type ReportReason = (typeof REPORT_REASON_KEYS)[number];
+
+/** Pending reports needed before a listing is auto-hidden for review. */
+export const AUTO_HIDE_REPORT_COUNT = 5;
+
 export const SITE_NAME = "Humanade";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://humanade.org";

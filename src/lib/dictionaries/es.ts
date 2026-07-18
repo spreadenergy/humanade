@@ -248,6 +248,24 @@ export const es: Dict = {
     cta: "Publicar una necesidad o una oferta",
   },
 
+  report: {
+    flag: "⚑ Reportar",
+    desc: "Si esta publicación es falsa, ofensiva, spam o un intento de estafa, avísanos — el equipo de moderación la revisará.",
+    reason: "Motivo",
+    reasons: {
+      SPAM: "Spam o publicidad",
+      FALSE: "Información falsa o engañosa",
+      OFFENSIVE: "Contenido ofensivo",
+      SCAM: "Estafa o intento de fraude",
+      OTHER: "Otro",
+    },
+    comment: "Detalles (opcional)",
+    commentPh: "Cualquier información que ayude al equipo de moderación",
+    submit: "Enviar reporte",
+    thanks:
+      "✓ Gracias. Recibimos tu reporte y el equipo de moderación revisará esta publicación.",
+  },
+
   admin: {
     title: "Moderación",
     enterNote:
@@ -260,6 +278,11 @@ export const es: Dict = {
     hide: "Ocultar",
     unhide: "Mostrar",
     delete: "Eliminar",
+    reportedSection: "Publicaciones reportadas",
+    reportsWord: "reportes",
+    reportWord: "reporte",
+    dismissReports: "Descartar reportes",
+    noReports: "No hay reportes pendientes.",
   },
 
   notFound: {

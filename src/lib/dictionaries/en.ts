@@ -241,6 +241,24 @@ export const en = {
     cta: "Post a need or an offer",
   },
 
+  report: {
+    flag: "⚑ Report",
+    desc: "If this post is false, offensive, spam, or a scam attempt, let us know — moderators will review it.",
+    reason: "Reason",
+    reasons: {
+      SPAM: "Spam or advertising",
+      FALSE: "False or misleading information",
+      OFFENSIVE: "Offensive content",
+      SCAM: "Scam or fraud attempt",
+      OTHER: "Other",
+    },
+    comment: "Details (optional)",
+    commentPh: "Anything that helps moderators understand the problem",
+    submit: "Send report",
+    thanks:
+      "✓ Thank you. Your report was received and moderators will review this listing.",
+  },
+
   admin: {
     title: "Moderation",
     enterNote: "Enter the admin key configured in the ADMIN_KEY environment variable.",
@@ -252,6 +270,11 @@ export const en = {
     hide: "Hide",
     unhide: "Unhide",
     delete: "Delete",
+    reportedSection: "Reported listings",
+    reportsWord: "reports",
+    reportWord: "report",
+    dismissReports: "Dismiss reports",
+    noReports: "No pending reports.",
   },
 
   notFound: {

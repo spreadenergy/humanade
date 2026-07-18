@@ -28,7 +28,19 @@ model Listing {
   hidden      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  reports     Report[]
 
   @@index([type, status, category, urgency])
   @@index([createdAt])
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reason    String // SPAM | FALSE | OFFENSIVE | SCAM | OTHER
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
 }

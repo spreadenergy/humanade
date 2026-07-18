@@ -25,6 +25,14 @@ export async function toggleHidden(formData: FormData) {
   redirect(`/admin?key=${encodeURIComponent(key)}`);
 }
 
+export async function dismissReports(formData: FormData) {
+  const key = await requireKey(formData);
+  const id = String(formData.get("id") ?? "");
+  await prisma.report.deleteMany({ where: { listingId: id } });
+  revalidatePath("/admin");
+  redirect(`/admin?key=${encodeURIComponent(key)}`);
+}
+
 export async function adminDelete(formData: FormData) {
   const key = await requireKey(formData);
   const id = String(formData.get("id") ?? "");

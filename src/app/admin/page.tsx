@@ -5,7 +5,7 @@ import { getI18n } from "@/lib/i18n";
 import { StatusBadge, TypeBadge, UrgencyBadge } from "@/components/Badges";
 import { timeAgo } from "@/components/ListingCard";
 import { adminKeyOk } from "@/lib/admin";
-import { adminDelete, toggleHidden } from "./actions";
+import { adminDelete, dismissReports, toggleHidden } from "./actions";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -42,17 +42,97 @@ export default async function AdminPage({
     );
   }
 
-  const listings = await prisma.listing.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 500,
-  });
+  const [listings, reported] = await Promise.all([
+    prisma.listing.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 500,
+    }),
+    prisma.listing.findMany({
+      where: { reports: { some: {} } },
+      include: {
+        reports: { orderBy: { createdAt: "desc" }, take: 10 },
+        _count: { select: { reports: true } },
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 100,
+    }),
+  ]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <h1 className="text-2xl font-extrabold text-navy">
         {d.admin.title} — {listings.length}{" "}
         {listings.length === 1 ? d.admin.listing : d.admin.listings}
       </h1>
+
+      <section className="rounded-lg border border-sun bg-white p-4">
+        <h2 className="font-bold text-navy">
+          ⚑ {d.admin.reportedSection} ({reported.length})
+        </h2>
+        {reported.length === 0 ? (
+          <p className="mt-2 text-sm text-slate-500">{d.admin.noReports}</p>
+        ) : (
+          <div className="mt-3 space-y-3">
+            {reported.map((l) => (
+              <div
+                key={l.id}
+                className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-200 p-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/listing/${l.id}`}
+                    className="block truncate font-semibold text-navy hover:underline"
+                  >
+                    {l.title}
+                  </Link>
+                  <p className="text-xs text-slate-500">
+                    {l._count.reports}{" "}
+                    {l._count.reports === 1
+                      ? d.admin.reportWord
+                      : d.admin.reportsWord}
+                    {l.hidden ? ` · ${d.admin.hidden}` : ""} ·{" "}
+                    {l.reports
+                      .map(
+                        (r) =>
+                          d.report.reasons[
+                            r.reason as keyof typeof d.report.reasons
+                          ] + (r.comment ? ` («${r.comment}»)` : ""),
+                      )
+                      .join(" · ")}
+                  </p>
+                </div>
+                <form action={toggleHidden}>
+                  <input type="hidden" name="key" value={key} />
+                  <input type="hidden" name="id" value={l.id} />
+                  <button
+                    type="submit"
+                    className="btn btn-outline !py-1.5 text-sm"
+                  >
+                    {l.hidden ? d.admin.unhide : d.admin.hide}
+                  </button>
+                </form>
+                <form action={dismissReports}>
+                  <input type="hidden" name="key" value={key} />
+                  <input type="hidden" name="id" value={l.id} />
+                  <button type="submit" className="btn btn-navy !py-1.5 text-sm">
+                    {d.admin.dismissReports}
+                  </button>
+                </form>
+                <form action={adminDelete}>
+                  <input type="hidden" name="key" value={key} />
+                  <input type="hidden" name="id" value={l.id} />
+                  <button
+                    type="submit"
+                    className="btn !bg-red-600 !py-1.5 text-sm text-white hover:!bg-red-700"
+                  >
+                    {d.admin.delete}
+                  </button>
+                </form>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
       <div className="space-y-2">
         {listings.map((l) => (
           <div

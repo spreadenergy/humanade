@@ -10,6 +10,7 @@ import {
   UrgencyBadge,
 } from "@/components/Badges";
 import { ContactButtons } from "@/components/ContactButtons";
+import { ReportForm } from "@/components/ReportForm";
 import { timeAgo } from "@/components/ListingCard";
 import type { Status } from "@/lib/constants";
 
@@ -35,10 +36,13 @@ export async function generateMetadata({
 
 export default async function ListingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ reported?: string }>;
 }) {
   const { id } = await params;
+  const { reported } = await searchParams;
   const { d } = await getI18n();
   const listing = await getListing(id);
   if (!listing) notFound();
@@ -128,6 +132,12 @@ export default async function ListingPage({
       )}
 
       <p className="text-xs text-slate-400">{d.listing.safety}</p>
+
+      {reported ? (
+        <p className="text-xs text-brand-green-dark">{d.report.thanks}</p>
+      ) : (
+        <ReportForm listingId={listing.id} d={d} />
+      )}
     </article>
   );
 }
