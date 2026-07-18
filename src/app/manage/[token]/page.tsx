@@ -2,14 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
-import { SITE_URL, STATUSES, STATUS_KEYS } from "@/lib/constants";
+import { SITE_URL, STATUS_KEYS } from "@/lib/constants";
+import { getI18n } from "@/lib/i18n";
 import { StatusBadge, TypeBadge } from "@/components/Badges";
 import { CopyButton } from "@/components/CopyButton";
 import { ManageEditForm } from "@/components/ManageEditForm";
 import { deleteListing, updateStatus } from "./actions";
 
 export const metadata: Metadata = {
-  title: "Manage your listing",
+  title: "Manage",
   robots: { index: false, follow: false },
 };
 export const dynamic = "force-dynamic";
@@ -23,6 +24,7 @@ export default async function ManagePage({
 }) {
   const { token } = await params;
   const sp = await searchParams;
+  const { d } = await getI18n();
   const listing = await prisma.listing.findUnique({
     where: { manageToken: token },
   });
@@ -35,63 +37,59 @@ export default async function ManagePage({
       {sp.created && (
         <div className="rounded-lg border border-brand-green bg-green-50 p-4">
           <h2 className="text-lg font-bold text-brand-green-dark">
-            🎉 Your listing is live!
+            {d.manage.createdTitle}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            <strong>Save this private link.</strong> It&apos;s the only way to
-            edit, mark fulfilled, or close your listing later — there are no
-            accounts or passwords on Humanade.
-          </p>
+          <p className="mt-1 text-sm text-slate-600">{d.manage.createdNote}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <code className="break-all rounded bg-white px-2 py-1 text-xs text-navy">
               {manageUrl}
             </code>
-            <CopyButton text={manageUrl} />
+            <CopyButton
+              text={manageUrl}
+              label={d.manage.copyLink}
+              copiedLabel={d.manage.copied}
+            />
           </div>
         </div>
       )}
       {sp.saved && (
         <div className="rounded-lg border border-brand-green bg-green-50 p-3 text-sm text-brand-green-dark">
-          ✓ Changes saved.
+          {d.manage.saved}
         </div>
       )}
       {sp.error && (
         <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-          Some fields were invalid and the update was not saved. Check the form
-          below — every listing needs a title, details, location, your name,
-          and at least one contact channel.
+          {d.manage.invalid}
         </div>
       )}
       {sp.confirmDelete && (
         <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-          To delete, tick the confirmation box next to the delete button.
+          {d.manage.confirmDelete}
         </div>
       )}
 
       <header>
-        <p className="text-sm text-slate-500">Managing your listing</p>
+        <p className="text-sm text-slate-500">{d.manage.managing}</p>
         <h1 className="mt-1 flex flex-wrap items-center gap-2 text-2xl font-extrabold text-navy">
           {listing.title}
         </h1>
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          <TypeBadge type={listing.type} />
-          <StatusBadge status={listing.status} />
+          <TypeBadge type={listing.type} d={d} />
+          <StatusBadge status={listing.status} d={d} />
         </div>
         <p className="mt-2 text-sm">
           <Link
             href={`/listing/${listing.id}`}
             className="text-slate-500 underline hover:text-navy"
           >
-            View public listing →
+            {d.manage.viewPublic}
           </Link>
         </p>
       </header>
 
       <section className="rounded-lg border border-slate-200 bg-white p-5">
-        <h2 className="font-bold text-navy">Update status</h2>
-        <p className="mb-3 mt-1 text-sm text-slate-500">
-          Keeping status current sends helpers where they&apos;re still needed.
-        </p>
+        <h2 className="font-bold text-navy">{d.manage.statusTitle}</h2>
+        <p className="mb-3 mt-1 text-sm text-slate-500">{d.manage.statusSub}</p>
         <div className="flex flex-wrap gap-2">
           {STATUS_KEYS.map((s) => (
             <form key={s} action={updateStatus}>
@@ -104,7 +102,7 @@ export default async function ManagePage({
                   listing.status === s ? "btn-outline opacity-50" : "btn-navy"
                 }`}
               >
-                {STATUSES[s].label}
+                {d.statuses[s]}
               </button>
             </form>
           ))}
@@ -112,45 +110,46 @@ export default async function ManagePage({
       </section>
 
       <section className="rounded-lg border border-slate-200 bg-white p-5">
-        <h2 className="font-bold text-navy">Edit listing</h2>
+        <h2 className="font-bold text-navy">{d.manage.editTitle}</h2>
         <div className="mt-3">
-          <ManageEditForm listing={listing} token={token} />
+          <ManageEditForm listing={listing} token={token} d={d} />
         </div>
       </section>
 
       <section className="rounded-lg border border-red-200 bg-white p-5">
-        <h2 className="font-bold text-red-700">Delete listing</h2>
-        <p className="mb-3 mt-1 text-sm text-slate-500">
-          Permanently removes the listing. If the need was met, prefer marking
-          it <strong>Fulfilled</strong> instead.
-        </p>
-        <form action={deleteListing} className="flex flex-wrap items-center gap-3">
+        <h2 className="font-bold text-red-700">{d.manage.deleteTitle}</h2>
+        <p className="mb-3 mt-1 text-sm text-slate-500">{d.manage.deleteSub}</p>
+        <form
+          action={deleteListing}
+          className="flex flex-wrap items-center gap-3"
+        >
           <input type="hidden" name="token" value={token} />
           <label className="flex items-center gap-2 text-sm text-slate-600">
             <input type="checkbox" name="confirm" className="h-4 w-4" />
-            I&apos;m sure
+            {d.manage.imSure}
           </label>
           <button
             type="submit"
             className="btn !bg-red-600 !py-1.5 text-sm text-white hover:!bg-red-700"
           >
-            Delete permanently
+            {d.manage.deleteBtn}
           </button>
         </form>
       </section>
 
       <div className="rounded-lg bg-slate-100 p-4 text-sm text-slate-600">
-        <p className="font-semibold text-navy">Your private link</p>
+        <p className="font-semibold text-navy">{d.manage.privateLink}</p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
           <code className="break-all rounded bg-white px-2 py-1 text-xs">
             {manageUrl}
           </code>
-          <CopyButton text={manageUrl} />
+          <CopyButton
+            text={manageUrl}
+            label={d.manage.copyLink}
+            copiedLabel={d.manage.copied}
+          />
         </div>
-        <p className="mt-2 text-xs text-slate-500">
-          Anyone with this link can manage this listing. Don&apos;t share it
-          publicly.
-        </p>
+        <p className="mt-2 text-xs text-slate-500">{d.manage.privateLinkNote}</p>
       </div>
     </div>
   );

@@ -1,26 +1,31 @@
 import type { Listing } from "@prisma/client";
 import { updateListing } from "@/app/manage/[token]/actions";
 import {
-  CATEGORIES,
+  CATEGORY_ICONS,
   CATEGORY_KEYS,
-  URGENCIES,
   URGENCY_KEYS,
 } from "@/lib/constants";
+import type { Dict } from "@/lib/dictionaries/en";
 import { LocationPicker } from "./LocationPicker";
 
 export function ManageEditForm({
   listing,
   token,
+  d,
 }: {
   listing: Listing;
   token: string;
+  d: Dict;
 }) {
   return (
     <form action={updateListing} className="space-y-4">
       <input type="hidden" name="token" value={token} />
       <div>
-        <label htmlFor="edit-title" className="mb-1 block text-sm font-semibold text-navy">
-          Title
+        <label
+          htmlFor="edit-title"
+          className="mb-1 block text-sm font-semibold text-navy"
+        >
+          {listing.type === "NEED" ? d.form.whatNeed : d.form.whatOffer}
         </label>
         <input
           id="edit-title"
@@ -32,8 +37,11 @@ export function ManageEditForm({
         />
       </div>
       <div>
-        <label htmlFor="edit-description" className="mb-1 block text-sm font-semibold text-navy">
-          Details
+        <label
+          htmlFor="edit-description"
+          className="mb-1 block text-sm font-semibold text-navy"
+        >
+          {d.form.details}
         </label>
         <textarea
           id="edit-description"
@@ -47,8 +55,11 @@ export function ManageEditForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label htmlFor="edit-category" className="mb-1 block text-sm font-semibold text-navy">
-            Category
+          <label
+            htmlFor="edit-category"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.category}
           </label>
           <select
             id="edit-category"
@@ -58,14 +69,17 @@ export function ManageEditForm({
           >
             {CATEGORY_KEYS.map((k) => (
               <option key={k} value={k}>
-                {CATEGORIES[k].icon} {CATEGORIES[k].label}
+                {CATEGORY_ICONS[k]} {d.categories[k].label}
               </option>
             ))}
           </select>
         </div>
         <div>
-          <label htmlFor="edit-urgency" className="mb-1 block text-sm font-semibold text-navy">
-            Urgency
+          <label
+            htmlFor="edit-urgency"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.urgency}
           </label>
           <select
             id="edit-urgency"
@@ -75,14 +89,17 @@ export function ManageEditForm({
           >
             {URGENCY_KEYS.map((k) => (
               <option key={k} value={k}>
-                {URGENCIES[k].label}
+                {d.urgencies[k]}
               </option>
             ))}
           </select>
         </div>
         <div>
-          <label htmlFor="edit-quantity" className="mb-1 block text-sm font-semibold text-navy">
-            Quantity / scale
+          <label
+            htmlFor="edit-quantity"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.quantity}
           </label>
           <input
             id="edit-quantity"
@@ -94,8 +111,11 @@ export function ManageEditForm({
         </div>
       </div>
       <div>
-        <label htmlFor="edit-location" className="mb-1 block text-sm font-semibold text-navy">
-          Location
+        <label
+          htmlFor="edit-location"
+          className="mb-1 block text-sm font-semibold text-navy"
+        >
+          {d.form.location}
         </label>
         <input
           id="edit-location"
@@ -109,13 +129,17 @@ export function ManageEditForm({
           <LocationPicker
             initialLat={listing.lat != null ? String(listing.lat) : undefined}
             initialLng={listing.lng != null ? String(listing.lng) : undefined}
+            labels={d.picker}
           />
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="edit-contactName" className="mb-1 block text-sm font-semibold text-navy">
-            Your name
+          <label
+            htmlFor="edit-contactName"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.yourName}
           </label>
           <input
             id="edit-contactName"
@@ -127,8 +151,11 @@ export function ManageEditForm({
           />
         </div>
         <div>
-          <label htmlFor="edit-orgName" className="mb-1 block text-sm font-semibold text-navy">
-            Organization
+          <label
+            htmlFor="edit-orgName"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.org}
           </label>
           <input
             id="edit-orgName"
@@ -139,8 +166,11 @@ export function ManageEditForm({
           />
         </div>
         <div>
-          <label htmlFor="edit-phone" className="mb-1 block text-sm font-semibold text-navy">
-            Phone
+          <label
+            htmlFor="edit-phone"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.phone}
           </label>
           <input
             id="edit-phone"
@@ -152,8 +182,11 @@ export function ManageEditForm({
           />
         </div>
         <div>
-          <label htmlFor="edit-whatsapp" className="mb-1 block text-sm font-semibold text-navy">
-            WhatsApp
+          <label
+            htmlFor="edit-whatsapp"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.whatsapp}
           </label>
           <input
             id="edit-whatsapp"
@@ -165,8 +198,11 @@ export function ManageEditForm({
           />
         </div>
         <div className="sm:col-span-2">
-          <label htmlFor="edit-email" className="mb-1 block text-sm font-semibold text-navy">
-            Email
+          <label
+            htmlFor="edit-email"
+            className="mb-1 block text-sm font-semibold text-navy"
+          >
+            {d.form.email}
           </label>
           <input
             id="edit-email"
@@ -179,7 +215,7 @@ export function ManageEditForm({
         </div>
       </div>
       <button type="submit" className="btn btn-navy">
-        Save changes
+        {d.manage.save}
       </button>
     </form>
   );

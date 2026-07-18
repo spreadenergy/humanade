@@ -1,4 +1,5 @@
 import type { Listing } from "@prisma/client";
+import type { Dict } from "@/lib/dictionaries/en";
 
 function waLink(number: string) {
   return `https://wa.me/${number.replace(/[^\d]/g, "")}`;
@@ -9,12 +10,12 @@ function waLink(number: string) {
  * messaging — they keep working even when connectivity to the platform
  * is intermittent.
  */
-export function ContactButtons({ listing }: { listing: Listing }) {
+export function ContactButtons({ listing, d }: { listing: Listing; d: Dict }) {
   return (
     <div className="flex flex-wrap gap-2">
       {listing.phone && (
         <a href={`tel:${listing.phone}`} className="btn btn-navy">
-          📞 Call {listing.phone}
+          📞 {d.listing.call} {listing.phone}
         </a>
       )}
       {listing.whatsapp && (
@@ -24,7 +25,7 @@ export function ContactButtons({ listing }: { listing: Listing }) {
           rel="noopener noreferrer"
           className="btn btn-green"
         >
-          💬 WhatsApp
+          💬 {d.listing.whatsapp}
         </a>
       )}
       {listing.email && (
@@ -34,7 +35,7 @@ export function ContactButtons({ listing }: { listing: Listing }) {
           )}`}
           className="btn btn-blue"
         >
-          ✉️ Email
+          ✉️ {d.listing.email}
         </a>
       )}
     </div>

@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import { SITE_NAME } from "@/lib/constants";
+import { es } from "@/lib/dictionaries/es";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    name: `${SITE_NAME} — ${es.siteTagline}`,
     short_name: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: es.siteDescription,
     start_url: "/",
     display: "standalone",
     background_color: "#faf8f3",

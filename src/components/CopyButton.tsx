@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-export function CopyButton({ text, label = "Copy link" }: { text: string; label?: string }) {
+export function CopyButton({
+  text,
+  label = "Copy link",
+  copiedLabel = "✓ Copied",
+}: {
+  text: string;
+  label?: string;
+  copiedLabel?: string;
+}) {
   const [copied, setCopied] = useState(false);
   return (
     <button
@@ -15,11 +23,11 @@ export function CopyButton({ text, label = "Copy link" }: { text: string; label?
           setTimeout(() => setCopied(false), 2000);
         } catch {
           // Clipboard unavailable (http / old browser) — select-and-copy manually.
-          window.prompt("Copy this link:", text);
+          window.prompt("Copy:", text);
         }
       }}
     >
-      {copied ? "✓ Copied" : label}
+      {copied ? copiedLabel : label}
     </button>
   );
 }

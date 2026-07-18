@@ -3,12 +3,12 @@
 import { useActionState } from "react";
 import { createListing, type PostFormState } from "@/app/post/actions";
 import {
-  CATEGORIES,
+  CATEGORY_ICONS,
   CATEGORY_KEYS,
-  URGENCIES,
   URGENCY_KEYS,
   type ListingType,
 } from "@/lib/constants";
+import type { Dict } from "@/lib/dictionaries/en";
 import { LocationPicker } from "./LocationPicker";
 
 function FieldError({ errors }: { errors?: string[] }) {
@@ -16,7 +16,7 @@ function FieldError({ errors }: { errors?: string[] }) {
   return <p className="mt-1 text-sm text-red-600">{errors[0]}</p>;
 }
 
-export function PostForm({ type }: { type: ListingType }) {
+export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
   const [state, formAction, pending] = useActionState<PostFormState, FormData>(
     createListing,
     {},
@@ -44,7 +44,7 @@ export function PostForm({ type }: { type: ListingType }) {
 
       <div>
         <label htmlFor="title" className="mb-1 block font-semibold text-navy">
-          {isNeed ? "What do you need?" : "What can you offer?"}
+          {isNeed ? d.form.whatNeed : d.form.whatOffer}
         </label>
         <input
           id="title"
@@ -52,19 +52,18 @@ export function PostForm({ type }: { type: ListingType }) {
           required
           maxLength={120}
           defaultValue={v.title}
-          placeholder={
-            isNeed
-              ? "e.g. Drinking water for 30 families"
-              : "e.g. Doctor available for remote consultations"
-          }
+          placeholder={isNeed ? d.form.needTitlePh : d.form.offerTitlePh}
           className="field"
         />
         <FieldError errors={e.title} />
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1 block font-semibold text-navy">
-          Details
+        <label
+          htmlFor="description"
+          className="mb-1 block font-semibold text-navy"
+        >
+          {d.form.details}
         </label>
         <textarea
           id="description"
@@ -73,11 +72,7 @@ export function PostForm({ type }: { type: ListingType }) {
           rows={5}
           maxLength={4000}
           defaultValue={v.description}
-          placeholder={
-            isNeed
-              ? "What exactly is needed, for how many people, by when, and any important context."
-              : "What you can provide, how much, when it's available, and any conditions."
-          }
+          placeholder={isNeed ? d.form.needDetailsPh : d.form.offerDetailsPh}
           className="field"
         />
         <FieldError errors={e.description} />
@@ -85,8 +80,11 @@ export function PostForm({ type }: { type: ListingType }) {
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label htmlFor="category" className="mb-1 block font-semibold text-navy">
-            Category
+          <label
+            htmlFor="category"
+            className="mb-1 block font-semibold text-navy"
+          >
+            {d.form.category}
           </label>
           <select
             id="category"
@@ -96,19 +94,22 @@ export function PostForm({ type }: { type: ListingType }) {
             className="field"
           >
             <option value="" disabled>
-              Choose…
+              {d.form.choose}
             </option>
             {CATEGORY_KEYS.map((k) => (
               <option key={k} value={k}>
-                {CATEGORIES[k].icon} {CATEGORIES[k].label}
+                {CATEGORY_ICONS[k]} {d.categories[k].label}
               </option>
             ))}
           </select>
           <FieldError errors={e.category} />
         </div>
         <div>
-          <label htmlFor="urgency" className="mb-1 block font-semibold text-navy">
-            Urgency
+          <label
+            htmlFor="urgency"
+            className="mb-1 block font-semibold text-navy"
+          >
+            {d.form.urgency}
           </label>
           <select
             id="urgency"
@@ -118,30 +119,38 @@ export function PostForm({ type }: { type: ListingType }) {
           >
             {URGENCY_KEYS.map((k) => (
               <option key={k} value={k}>
-                {URGENCIES[k].label}
+                {d.urgencies[k]}
               </option>
             ))}
           </select>
         </div>
         <div>
-          <label htmlFor="quantity" className="mb-1 block font-semibold text-navy">
-            Quantity / scale{" "}
-            <span className="font-normal text-slate-400">(optional)</span>
+          <label
+            htmlFor="quantity"
+            className="mb-1 block font-semibold text-navy"
+          >
+            {d.form.quantity}{" "}
+            <span className="font-normal text-slate-400">
+              {d.form.optional}
+            </span>
           </label>
           <input
             id="quantity"
             name="quantity"
             maxLength={120}
             defaultValue={v.quantity}
-            placeholder="e.g. 200 liters, 5 beds, 3 volunteers"
+            placeholder={d.form.quantityPh}
             className="field"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="locationName" className="mb-1 block font-semibold text-navy">
-          Location
+        <label
+          htmlFor="locationName"
+          className="mb-1 block font-semibold text-navy"
+        >
+          {d.form.location}
         </label>
         <input
           id="locationName"
@@ -149,24 +158,31 @@ export function PostForm({ type }: { type: ListingType }) {
           required
           maxLength={160}
           defaultValue={v.locationName}
-          placeholder="City, town, neighborhood, or area"
+          placeholder={d.form.locationPh}
           className="field"
         />
         <FieldError errors={e.locationName} />
         <div className="mt-2">
-          <LocationPicker initialLat={v.lat} initialLng={v.lng} />
+          <LocationPicker
+            initialLat={v.lat}
+            initialLng={v.lng}
+            labels={d.picker}
+          />
         </div>
       </div>
 
       <fieldset className="rounded-lg border border-slate-200 bg-white p-4">
-        <legend className="px-1 font-semibold text-navy">Contact</legend>
-        <p className="mb-3 text-sm text-slate-500">
-          People will contact you directly. Provide at least one channel.
-        </p>
+        <legend className="px-1 font-semibold text-navy">
+          {d.form.contactLegend}
+        </legend>
+        <p className="mb-3 text-sm text-slate-500">{d.form.contactSub}</p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="contactName" className="mb-1 block text-sm font-semibold text-navy">
-              Your name
+            <label
+              htmlFor="contactName"
+              className="mb-1 block text-sm font-semibold text-navy"
+            >
+              {d.form.yourName}
             </label>
             <input
               id="contactName"
@@ -179,22 +195,30 @@ export function PostForm({ type }: { type: ListingType }) {
             <FieldError errors={e.contactName} />
           </div>
           <div>
-            <label htmlFor="orgName" className="mb-1 block text-sm font-semibold text-navy">
-              Organization{" "}
-              <span className="font-normal text-slate-400">(optional)</span>
+            <label
+              htmlFor="orgName"
+              className="mb-1 block text-sm font-semibold text-navy"
+            >
+              {d.form.org}{" "}
+              <span className="font-normal text-slate-400">
+                {d.form.optional}
+              </span>
             </label>
             <input
               id="orgName"
               name="orgName"
               maxLength={120}
               defaultValue={v.orgName}
-              placeholder="NGO, church, shelter, business…"
+              placeholder={d.form.orgPh}
               className="field"
             />
           </div>
           <div>
-            <label htmlFor="phone" className="mb-1 block text-sm font-semibold text-navy">
-              Phone
+            <label
+              htmlFor="phone"
+              className="mb-1 block text-sm font-semibold text-navy"
+            >
+              {d.form.phone}
             </label>
             <input
               id="phone"
@@ -202,14 +226,17 @@ export function PostForm({ type }: { type: ListingType }) {
               type="tel"
               maxLength={40}
               defaultValue={v.phone}
-              placeholder="+1 555 000 0000"
+              placeholder="+58 412 000 0000"
               className="field"
             />
             <FieldError errors={e.phone} />
           </div>
           <div>
-            <label htmlFor="whatsapp" className="mb-1 block text-sm font-semibold text-navy">
-              WhatsApp
+            <label
+              htmlFor="whatsapp"
+              className="mb-1 block text-sm font-semibold text-navy"
+            >
+              {d.form.whatsapp}
             </label>
             <input
               id="whatsapp"
@@ -217,13 +244,16 @@ export function PostForm({ type }: { type: ListingType }) {
               type="tel"
               maxLength={40}
               defaultValue={v.whatsapp}
-              placeholder="+1 555 000 0000"
+              placeholder="+58 412 000 0000"
               className="field"
             />
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="email" className="mb-1 block text-sm font-semibold text-navy">
-              Email
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-semibold text-navy"
+            >
+              {d.form.email}
             </label>
             <input
               id="email"
@@ -244,16 +274,12 @@ export function PostForm({ type }: { type: ListingType }) {
         className={`btn w-full sm:w-auto ${isNeed ? "btn-blue" : "btn-green"}`}
       >
         {pending
-          ? "Posting…"
+          ? d.form.posting
           : isNeed
-            ? "Post my request"
-            : "Post my offer"}
+            ? d.form.submitNeed
+            : d.form.submitOffer}
       </button>
-      <p className="text-xs text-slate-400">
-        After posting you&apos;ll get a private management link to edit, mark
-        fulfilled, or close your listing. Your contact details are shown
-        publicly on the listing so helpers can reach you.
-      </p>
+      <p className="text-xs text-slate-400">{d.form.afterNote}</p>
     </form>
   );
 }

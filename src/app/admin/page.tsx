@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
+import { getI18n } from "@/lib/i18n";
 import { StatusBadge, TypeBadge, UrgencyBadge } from "@/components/Badges";
 import { timeAgo } from "@/components/ListingCard";
 import { adminKeyOk } from "@/lib/admin";
@@ -18,25 +19,23 @@ export default async function AdminPage({
   searchParams: Promise<{ key?: string }>;
 }) {
   const { key } = await searchParams;
+  const { d } = await getI18n();
 
   if (!adminKeyOk(key)) {
     return (
       <div className="mx-auto max-w-md space-y-4 pt-8 text-center">
-        <h1 className="text-2xl font-extrabold text-navy">Moderation</h1>
-        <p className="text-sm text-slate-500">
-          Enter the admin key configured in the <code>ADMIN_KEY</code>{" "}
-          environment variable.
-        </p>
+        <h1 className="text-2xl font-extrabold text-navy">{d.admin.title}</h1>
+        <p className="text-sm text-slate-500">{d.admin.enterNote}</p>
         <form method="get" action="/admin" className="flex gap-2">
           <input
             type="password"
             name="key"
-            placeholder="Admin key"
+            placeholder={d.admin.keyPh}
             className="field"
             autoFocus
           />
           <button type="submit" className="btn btn-navy">
-            Enter
+            {d.admin.enter}
           </button>
         </form>
       </div>
@@ -51,7 +50,8 @@ export default async function AdminPage({
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-extrabold text-navy">
-        Moderation — {listings.length} listing{listings.length === 1 ? "" : "s"}
+        {d.admin.title} — {listings.length}{" "}
+        {listings.length === 1 ? d.admin.listing : d.admin.listings}
       </h1>
       <div className="space-y-2">
         {listings.map((l) => (
@@ -63,12 +63,12 @@ export default async function AdminPage({
           >
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5">
-                <TypeBadge type={l.type} />
-                <StatusBadge status={l.status} />
-                <UrgencyBadge urgency={l.urgency} />
+                <TypeBadge type={l.type} d={d} />
+                <StatusBadge status={l.status} d={d} />
+                <UrgencyBadge urgency={l.urgency} d={d} />
                 {l.hidden && (
                   <span className="rounded-full bg-red-600 px-2.5 py-0.5 text-xs font-semibold text-white">
-                    Hidden
+                    {d.admin.hidden}
                   </span>
                 )}
               </div>
@@ -80,7 +80,8 @@ export default async function AdminPage({
               </Link>
               <p className="truncate text-xs text-slate-500">
                 📍 {l.locationName} · {l.contactName}
-                {l.orgName ? ` (${l.orgName})` : ""} · {timeAgo(l.createdAt)} ·{" "}
+                {l.orgName ? ` (${l.orgName})` : ""} ·{" "}
+                {timeAgo(l.createdAt, d.time)} ·{" "}
                 {[l.phone, l.whatsapp, l.email].filter(Boolean).join(" · ")}
               </p>
             </div>
@@ -88,7 +89,7 @@ export default async function AdminPage({
               <input type="hidden" name="key" value={key} />
               <input type="hidden" name="id" value={l.id} />
               <button type="submit" className="btn btn-outline !py-1.5 text-sm">
-                {l.hidden ? "Unhide" : "Hide"}
+                {l.hidden ? d.admin.unhide : d.admin.hide}
               </button>
             </form>
             <form action={adminDelete}>
@@ -98,7 +99,7 @@ export default async function AdminPage({
                 type="submit"
                 className="btn !bg-red-600 !py-1.5 text-sm text-white hover:!bg-red-700"
               >
-                Delete
+                {d.admin.delete}
               </button>
             </form>
           </div>

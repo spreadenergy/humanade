@@ -1,13 +1,11 @@
 import {
-  CATEGORIES,
+  CATEGORY_ICONS,
   CATEGORY_KEYS,
-  STATUSES,
   STATUS_KEYS,
-  TYPES,
   TYPE_KEYS,
-  URGENCIES,
   URGENCY_KEYS,
 } from "@/lib/constants";
+import type { Dict } from "@/lib/dictionaries/en";
 import type { ListingFilters } from "@/lib/listings";
 
 /**
@@ -16,9 +14,11 @@ import type { ListingFilters } from "@/lib/listings";
  */
 export function FilterBar({
   filters,
+  d,
   action = "/browse",
 }: {
   filters: ListingFilters;
+  d: Dict;
   action?: string;
 }) {
   return (
@@ -32,65 +32,73 @@ export function FilterBar({
           type="search"
           name="q"
           defaultValue={filters.q ?? ""}
-          placeholder="Search…"
-          aria-label="Search listings"
+          placeholder={d.filter.searchPlaceholder}
+          aria-label={d.filter.searchAria}
           className="field col-span-2 sm:col-span-3 lg:col-span-2"
         />
-        <select name="type" defaultValue={filters.type ?? ""} aria-label="Type" className="field">
-          <option value="">Needs + Offers</option>
+        <select
+          name="type"
+          defaultValue={filters.type ?? ""}
+          aria-label={d.filter.type}
+          className="field"
+        >
+          <option value="">{d.filter.needsOffers}</option>
           {TYPE_KEYS.map((k) => (
             <option key={k} value={k}>
-              {TYPES[k].label}
+              {d.types[k]}
             </option>
           ))}
         </select>
         <select
           name="category"
           defaultValue={filters.category ?? ""}
-          aria-label="Category"
+          aria-label={d.filter.category}
           className="field"
         >
-          <option value="">All categories</option>
+          <option value="">{d.filter.allCategories}</option>
           {CATEGORY_KEYS.map((k) => (
             <option key={k} value={k}>
-              {CATEGORIES[k].icon} {CATEGORIES[k].short}
+              {CATEGORY_ICONS[k]} {d.categories[k].short}
             </option>
           ))}
         </select>
         <select
           name="urgency"
           defaultValue={filters.urgency ?? ""}
-          aria-label="Urgency"
+          aria-label={d.filter.urgency}
           className="field"
         >
-          <option value="">Any urgency</option>
+          <option value="">{d.filter.anyUrgency}</option>
           {URGENCY_KEYS.map((k) => (
             <option key={k} value={k}>
-              {URGENCIES[k].label}
+              {d.urgencies[k]}
             </option>
           ))}
         </select>
         <select
           name="status"
           defaultValue={filters.status ?? ""}
-          aria-label="Status"
+          aria-label={d.filter.status}
           className="field"
         >
-          <option value="">Active (open + assigned)</option>
+          <option value="">{d.filter.activeDefault}</option>
           {STATUS_KEYS.map((k) => (
             <option key={k} value={k}>
-              {STATUSES[k].label}
+              {d.statuses[k]}
             </option>
           ))}
-          <option value="ANY">Everything</option>
+          <option value="ANY">{d.filter.everything}</option>
         </select>
       </div>
       <div className="mt-2 flex items-center gap-3">
         <button type="submit" className="btn btn-navy !py-1.5 text-sm">
-          Filter
+          {d.filter.filter}
         </button>
-        <a href={action} className="text-sm text-slate-500 underline hover:text-navy">
-          Clear
+        <a
+          href={action}
+          className="text-sm text-slate-500 underline hover:text-navy"
+        >
+          {d.filter.clear}
         </a>
       </div>
     </form>

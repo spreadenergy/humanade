@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap } from "leaflet";
+import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/lib/constants";
 
 export type MapListing = {
   id: string;
@@ -16,7 +17,20 @@ export type MapListing = {
   lng: number | null;
 };
 
-export function MapView({ listings }: { listings: MapListing[] }) {
+export type MapLabels = {
+  need: string;
+  offer: string;
+  viewListing: string;
+  ariaLabel: string;
+};
+
+export function MapView({
+  listings,
+  labels,
+}: {
+  listings: MapListing[];
+  labels: MapLabels;
+}) {
   const mapEl = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
 
@@ -26,7 +40,10 @@ export function MapView({ listings }: { listings: MapListing[] }) {
     (async () => {
       const L = (await import("leaflet")).default;
       if (cancelled || !mapEl.current) return;
-      const map = L.map(mapEl.current).setView([20, 0], 2);
+      const map = L.map(mapEl.current).setView(
+        DEFAULT_MAP_CENTER,
+        DEFAULT_MAP_ZOOM,
+      );
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -44,13 +61,14 @@ export function MapView({ listings }: { listings: MapListing[] }) {
           fillOpacity: 0.95,
         }).addTo(map);
         marker.bindPopup(
-          `<strong>${isNeed ? "Need" : "Offer"}:</strong> ${escapeHtml(l.title)}<br>` +
+          `<strong>${isNeed ? labels.need : labels.offer}:</strong> ${escapeHtml(l.title)}<br>` +
             `<small>📍 ${escapeHtml(l.locationName)}</small><br>` +
-            `<a href="/listing/${l.id}">View listing →</a>`,
+            `<a href="/listing/${l.id}">${labels.viewListing}</a>`,
         );
         bounds.push([l.lat, l.lng]);
       }
-      if (bounds.length > 0) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      if (bounds.length > 0)
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
       mapRef.current = map;
     })();
     return () => {
@@ -58,14 +76,14 @@ export function MapView({ listings }: { listings: MapListing[] }) {
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, [listings]);
+  }, [listings, labels]);
 
   return (
     <div
       ref={mapEl}
       className="h-[70vh] w-full rounded-lg border border-slate-300"
       role="region"
-      aria-label="Map of needs and offers"
+      aria-label={labels.ariaLabel}
     />
   );
 }

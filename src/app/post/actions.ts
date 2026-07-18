@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { getI18n } from "@/lib/i18n";
 import { parseListingForm } from "@/lib/validation";
 
 export type PostFormState = {
@@ -19,7 +20,8 @@ export async function createListing(
   // Honeypot: real users never fill this hidden field.
   if (formData.get("website")) redirect("/");
 
-  const parsed = parseListingForm(formData);
+  const { d } = await getI18n();
+  const parsed = parseListingForm(formData, d.errors);
   if (!parsed.success) {
     const flat = z.flattenError(parsed.error);
     const values: Record<string, string> = {};

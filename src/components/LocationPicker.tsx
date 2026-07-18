@@ -4,6 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap, CircleMarker } from "leaflet";
 
+export type PickerLabels = {
+  addPin: string;
+  useMyLocation: string;
+  removePin: string;
+  pinnedAt: string;
+  tapMap: string;
+};
+
 /**
  * Optional map pin for a listing. Coordinates land in hidden lat/lng
  * inputs so the surrounding form stays a plain HTML form.
@@ -11,9 +19,11 @@ import type { Map as LeafletMap, CircleMarker } from "leaflet";
 export function LocationPicker({
   initialLat,
   initialLng,
+  labels,
 }: {
   initialLat?: string;
   initialLng?: string;
+  labels: PickerLabels;
 }) {
   const [open, setOpen] = useState(Boolean(initialLat && initialLng));
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
@@ -88,7 +98,7 @@ export function LocationPicker({
           className="btn btn-outline !py-1.5 text-sm"
           onClick={() => setOpen(true)}
         >
-          📍 Add a map pin (optional)
+          {labels.addPin}
         </button>
       ) : (
         <>
@@ -98,7 +108,7 @@ export function LocationPicker({
               className="btn btn-outline !py-1.5 text-sm"
               onClick={useMyLocation}
             >
-              Use my location
+              {labels.useMyLocation}
             </button>
             {coords && (
               <button
@@ -110,13 +120,13 @@ export function LocationPicker({
                   markerRef.current = null;
                 }}
               >
-                Remove pin
+                {labels.removePin}
               </button>
             )}
             <span className="text-xs text-slate-500">
               {coords
-                ? `Pinned at ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
-                : "Tap the map to drop a pin"}
+                ? `${labels.pinnedAt} ${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
+                : labels.tapMap}
             </span>
           </div>
           <div

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
+import { getI18n } from "@/lib/i18n";
 import {
   CategoryBadge,
   StatusBadge,
@@ -10,6 +11,7 @@ import {
 } from "@/components/Badges";
 import { ContactButtons } from "@/components/ContactButtons";
 import { timeAgo } from "@/components/ListingCard";
+import type { Status } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +26,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const listing = await getListing(id);
-  if (!listing) return { title: "Listing not found" };
+  if (!listing) return { title: "Not found" };
   return {
     title: listing.title,
     description: listing.description.slice(0, 160),
@@ -37,42 +39,47 @@ export default async function ListingPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { d } = await getI18n();
   const listing = await getListing(id);
   if (!listing) notFound();
 
-  const resolved = listing.status === "FULFILLED" || listing.status === "CLOSED";
+  const resolved =
+    listing.status === "FULFILLED" || listing.status === "CLOSED";
 
   return (
     <article className="mx-auto max-w-3xl space-y-6">
       <p className="text-sm">
-        <Link href="/browse" className="text-slate-500 underline hover:text-navy">
-          ← Back to browse
+        <Link
+          href="/browse"
+          className="text-slate-500 underline hover:text-navy"
+        >
+          {d.listing.back}
         </Link>
       </p>
 
       <header className="space-y-3">
         <div className="flex flex-wrap items-center gap-1.5">
-          <TypeBadge type={listing.type} />
-          <CategoryBadge category={listing.category} />
-          <UrgencyBadge urgency={listing.urgency} />
-          <StatusBadge status={listing.status} />
+          <TypeBadge type={listing.type} d={d} />
+          <CategoryBadge category={listing.category} d={d} />
+          <UrgencyBadge urgency={listing.urgency} d={d} />
+          <StatusBadge status={listing.status} d={d} />
         </div>
         <h1 className="text-3xl font-extrabold text-navy">{listing.title}</h1>
         <p className="text-sm text-slate-500">
-          📍 {listing.locationName} · Posted {timeAgo(listing.createdAt)}
+          📍 {listing.locationName} · {d.listing.posted}{" "}
+          {timeAgo(listing.createdAt, d.time)}
           {listing.orgName ? ` · ${listing.orgName}` : ""}
         </p>
       </header>
 
       {resolved && (
         <div className="rounded-lg border border-slate-300 bg-slate-100 p-4 text-slate-700">
-          This listing has been marked{" "}
-          <strong>{listing.status.toLowerCase()}</strong> and is no longer
-          active.{" "}
+          {d.listing.resolvedPre}{" "}
+          <strong>{d.statuses[listing.status as Status]}</strong>{" "}
+          {d.listing.resolvedPost}{" "}
           <Link href="/browse" className="underline">
-            Browse active listings
+            {d.listing.browseActive}
           </Link>
-          .
         </div>
       )}
 
@@ -82,7 +89,9 @@ export default async function ListingPage({
         </p>
         {listing.quantity && (
           <p className="mt-4 text-sm text-slate-600">
-            <span className="font-semibold text-navy">Quantity / scale:</span>{" "}
+            <span className="font-semibold text-navy">
+              {d.listing.quantity}
+            </span>{" "}
             {listing.quantity}
           </p>
         )}
@@ -91,38 +100,34 @@ export default async function ListingPage({
       {!resolved && (
         <section className="rounded-lg border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-bold text-navy">
-            Contact {listing.contactName}
+            {d.listing.contact} {listing.contactName}
           </h2>
           <p className="mb-4 mt-1 text-sm text-slate-500">
-            Reach out directly — Humanade doesn&apos;t sit in the middle.
+            {d.listing.contactSub}
           </p>
-          <ContactButtons listing={listing} />
+          <ContactButtons listing={listing} d={d} />
         </section>
       )}
 
       {listing.lat != null && listing.lng != null && (
         <p className="text-sm text-slate-500">
-          Pinned location:{" "}
+          {d.listing.pinned}{" "}
           <a
             className="underline hover:text-navy"
             href={`https://www.openstreetmap.org/?mlat=${listing.lat}&mlon=${listing.lng}#map=13/${listing.lat}/${listing.lng}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            open in OpenStreetMap
+            {d.listing.openOSM}
           </a>{" "}
           ·{" "}
           <Link href="/map" className="underline hover:text-navy">
-            see all on Humanade map
+            {d.listing.seeAllMap}
           </Link>
         </p>
       )}
 
-      <p className="text-xs text-slate-400">
-        Posted something yourself? Use the private management link you received
-        to update or close your listing. Stay safe: meet in public places when
-        possible and never send money to people you cannot verify.
-      </p>
+      <p className="text-xs text-slate-400">{d.listing.safety}</p>
     </article>
   );
 }
