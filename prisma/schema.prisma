@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  type        String // NEED | OFFER
+  title       String
+  description String
+  category    String // CONNECT | HEALTH | DENTAL | NUTRITION | SHELTER | VOLUNTEERS | LOGISTICS | EDUCATION
+  urgency     String   @default("NORMAL") // CRITICAL | HIGH | NORMAL
+  status      String   @default("OPEN") // OPEN | ASSIGNED | FULFILLED | CLOSED
+  quantity    String?
+  locationName String
+  lat         Float?
+  lng         Float?
+  contactName String
+  orgName     String?
+  phone       String?
+  whatsapp    String?
+  email       String?
+  manageToken String   @unique
+  hidden      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type, status, category, urgency])
+  @@index([createdAt])
+}

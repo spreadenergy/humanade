@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #1b3a6b;
+  --color-navy-dark: #142c52;
+  --color-brand-blue: #2996d9;
+  --color-brand-blue-dark: #1f7db8;
+  --color-brand-green: #5fae33;
+  --color-brand-green-dark: #4c8f27;
+  --color-sun: #f6a800;
+  --color-cream: #faf8f3;
+  --color-ink: #22303f;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shared form-control look */
+.field {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base text-ink placeholder:text-slate-400 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/30;
+}
+
+/* Buttons: use as "btn btn-blue" etc. */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50;
+}
+
+.btn-blue {
+  @apply bg-brand-blue text-white hover:bg-brand-blue-dark focus:ring-brand-blue;
+}
+
+.btn-green {
+  @apply bg-brand-green text-white hover:bg-brand-green-dark focus:ring-brand-green;
+}
+
+.btn-navy {
+  @apply bg-navy text-white hover:bg-navy-dark focus:ring-navy;
+}
+
+.btn-outline {
+  @apply border border-slate-300 bg-white text-ink hover:bg-slate-50 focus:ring-navy;
+}
