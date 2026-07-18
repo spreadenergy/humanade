@@ -58,9 +58,9 @@ function buildWhere(filters: ListingFilters): Prisma.ListingWhereInput {
   else if (filters.status !== "ANY") where.status = filters.status;
   if (filters.q) {
     where.OR = [
-      { title: { contains: filters.q } },
-      { description: { contains: filters.q } },
-      { locationName: { contains: filters.q } },
+      { title: { contains: filters.q, mode: "insensitive" } },
+      { description: { contains: filters.q, mode: "insensitive" } },
+      { locationName: { contains: filters.q, mode: "insensitive" } },
     ];
   }
   return where;

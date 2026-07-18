@@ -50,16 +50,16 @@ organization. Live at **[humanade.org](https://humanade.org)**.
 - [Next.js](https://nextjs.org) (App Router, TypeScript) — runs as a plain
   Node.js app
 - [Tailwind CSS 4](https://tailwindcss.com)
-- [Prisma](https://prisma.io) + SQLite (swappable to Postgres/MySQL by
-  changing the datasource + `DATABASE_URL`)
+- [Prisma](https://prisma.io) + PostgreSQL (works with the free
+  [Neon](https://neon.tech) tier — no server to manage)
 - [Leaflet](https://leafletjs.com) + OpenStreetMap tiles
 
 ## Local development
 
 ```bash
 npm install            # also runs `prisma generate`
-cp .env.example .env   # then edit values
-npm run db:push        # create/update the SQLite database
+cp .env.example .env   # then edit values (DATABASE_URL needs a Postgres DB)
+npm run db:push        # create/update the database schema
 npm run db:seed        # optional: sample listings
 npm run dev            # http://localhost:3000
 ```
@@ -68,7 +68,7 @@ npm run dev            # http://localhost:3000
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Prisma connection string, e.g. `file:./humanade.db` (relative to `prisma/schema.prisma`, i.e. the file lives at `prisma/humanade.db`) |
+| `DATABASE_URL` | PostgreSQL connection string (a free [Neon](https://neon.tech) database works; on Vercel it's created automatically via the Storage tab) |
 | `ADMIN_KEY` | Secret key for the `/admin` moderation page. Admin is disabled until this is set to something other than `change-me`. |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (default `https://humanade.org`) |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional. Bot's WhatsApp number; when set, a "Post via WhatsApp" button appears on the `/post` page. |
@@ -77,33 +77,34 @@ npm run dev            # http://localhost:3000
 | `WHATSAPP_PHONE_NUMBER_ID` | Optional. From WhatsApp → API Setup in the Meta dashboard. |
 | `WHATSAPP_APP_SECRET` | Optional but recommended. Meta App secret; enables webhook signature verification. |
 
-## Deploying on Hostinger (Node.js)
+## Deploying
+
+### Vercel (fastest — free tier, no server to manage)
+
+1. Sign in at [vercel.com](https://vercel.com) with the GitHub account that
+   owns this repo and import `spreadenergy/humanade` (branch `main`).
+2. In the project's **Storage** tab, create a **Neon (Postgres)** database —
+   this sets `DATABASE_URL` automatically.
+3. In **Settings → Environment Variables**, add `ADMIN_KEY` (long random
+   value) and `NEXT_PUBLIC_SITE_URL` (the deployment URL, later
+   `https://humanade.org`).
+4. Redeploy. The build runs `prisma db push` and seeds sample data
+   automatically (seeding skips if the database already has listings).
+5. To use the real domain: **Settings → Domains → add humanade.org**, then
+   create the DNS records Vercel shows inside Hostinger's DNS zone editor.
+
+### Hostinger VPS (or any Linux server)
 
 Humanade is a standard Node.js app: build once, then run `npm start`.
 
-1. Push this repository and connect it to your Hostinger Node.js
-   app / VPS.
-2. Set environment variables (`DATABASE_URL`, `ADMIN_KEY`,
-   `NEXT_PUBLIC_SITE_URL=https://humanade.org`).
-3. Build and initialize:
-   ```bash
-   npm install
-   npm run db:push
-   npm run db:seed   # optional
-   npm run build
-   ```
-4. Start with `npm start` (respects the `PORT` env var Hostinger assigns,
-   e.g. `PORT=3000 npm start`), or with PM2 on a VPS:
-   ```bash
-   pm2 start npm --name humanade -- start
-   pm2 save
-   ```
-5. Point the `humanade.org` domain / reverse proxy at the app's port.
-
-**SQLite note:** the database is a file (`prisma/humanade.db`). Make sure it
-lives on persistent storage and is included in backups. For higher traffic,
-switch the Prisma datasource to Postgres and update `DATABASE_URL` — no code
-changes needed.
+1. Install Node.js 20+, pm2, and git; clone this repo.
+2. `cp .env.example .env` and set `DATABASE_URL` (a free
+   [Neon](https://neon.tech) database is the easiest — nothing to install),
+   `ADMIN_KEY`, and `NEXT_PUBLIC_SITE_URL=https://humanade.org`.
+3. Run `SEED=1 bash scripts/deploy.sh` — it installs, syncs the schema,
+   seeds (first run only), builds, and starts the app under pm2 on port 3000.
+4. Reverse-proxy the domain to the app's port with SSL (Caddy or Nginx).
+5. For updates: `bash scripts/deploy.sh`.
 
 ## WhatsApp bot
 

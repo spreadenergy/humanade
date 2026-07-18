@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
+    "vercel-build": "prisma db push && tsx prisma/seed.ts && next build",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts"
   },
