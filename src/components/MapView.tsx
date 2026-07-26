@@ -80,7 +80,7 @@ export function MapView({
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, [listings, labels]);
+  }, [listings, labels, listingBase]);
 
   return (
     <div

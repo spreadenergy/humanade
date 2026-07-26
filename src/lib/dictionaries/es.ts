@@ -315,6 +315,19 @@ export const es: Dict = {
     emailFooter: "Humanade — una plataforma del Institute for Human Evolution",
   },
 
+  category: {
+    title: "{category}",
+    metaDescription:
+      "Solicitudes y ofertas de {category} en Humanade: mira qué hace falta y quién puede ayudar.",
+  },
+
+  place: {
+    title: "Necesidades y ofertas en {place}",
+    metaDescription:
+      "Qué está pidiendo la gente en {place} y qué están ofreciendo otros. Contacta directo, sin crear cuenta.",
+    otherPlaces: "Otras zonas",
+  },
+
   privacy: {
     title: "Privacidad",
     metaDescription:

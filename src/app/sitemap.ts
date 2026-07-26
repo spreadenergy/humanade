@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
-import { SITE_URL } from "@/lib/constants";
+import { CATEGORY_KEYS, SITE_URL } from "@/lib/constants";
 import { LOCALES, lp } from "@/lib/i18n";
+import { activePlaces } from "@/lib/places";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +26,15 @@ function entry(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const listings = await prisma.listing.findMany({
-    where: { hidden: false, status: { in: ["OPEN", "ASSIGNED"] } },
-    select: { id: true, updatedAt: true },
-    orderBy: { createdAt: "desc" },
-    take: 1000,
-  });
+  const [listings, places] = await Promise.all([
+    prisma.listing.findMany({
+      where: { hidden: false, status: { in: ["OPEN", "ASSIGNED"] } },
+      select: { id: true, updatedAt: true },
+      orderBy: { createdAt: "desc" },
+      take: 1000,
+    }),
+    activePlaces(),
+  ]);
 
   return [
     ...entry("/", { changeFrequency: "hourly", priority: 1 }),
@@ -38,6 +42,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry("/map", { changeFrequency: "hourly", priority: 0.7 }),
     ...entry("/about", { changeFrequency: "monthly", priority: 0.5 }),
     ...entry("/privacy", { changeFrequency: "yearly", priority: 0.3 }),
+    // The pages that can answer a real search: a thing, in a place.
+    ...CATEGORY_KEYS.flatMap((k) =>
+      entry(`/category/${k.toLowerCase()}`, {
+        changeFrequency: "daily",
+        priority: 0.8,
+      }),
+    ),
+    ...places.flatMap((p) =>
+      entry(`/place/${p.slug}`, { changeFrequency: "daily", priority: 0.8 }),
+    ),
     ...listings.flatMap((l) =>
       entry(`/listing/${l.id}`, { lastModified: l.updatedAt }),
     ),

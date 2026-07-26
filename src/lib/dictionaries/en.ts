@@ -308,6 +308,19 @@ export const en = {
     emailFooter: "Humanade — a platform of the Institute for Human Evolution",
   },
 
+  category: {
+    title: "{category}",
+    metaDescription:
+      "Requests and offers under {category} on Humanade — see what is needed and who can help.",
+  },
+
+  place: {
+    title: "Needs and offers in {place}",
+    metaDescription:
+      "What people in {place} are asking for and what others are offering. Contact them directly, no account needed.",
+    otherPlaces: "Other places",
+  },
+
   privacy: {
     title: "Privacy",
     metaDescription:

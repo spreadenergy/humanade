@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { getI18n, getLocale, lp } from "@/lib/i18n";
 import { excerpt, pageMetadata } from "@/lib/page-metadata";
+import { slugify } from "@/lib/places";
 import { jsonLdScript, listingJsonLd } from "@/lib/structured-data";
 import {
   CategoryBadge,
@@ -74,13 +75,22 @@ export default async function ListingPage({
       <header className="space-y-3">
         <div className="flex flex-wrap items-center gap-1.5">
           <TypeBadge type={listing.type} d={d} />
-          <CategoryBadge category={listing.category} d={d} />
+          <Link href={lp(locale, `/category/${listing.category.toLowerCase()}`)}>
+            <CategoryBadge category={listing.category} d={d} />
+          </Link>
           <UrgencyBadge urgency={listing.urgency} d={d} />
           <StatusBadge status={listing.status} d={d} />
         </div>
         <h1 className="text-3xl font-extrabold text-navy">{listing.title}</h1>
         <p className="text-sm text-slate-500">
-          📍 {listing.locationName} · {d.listing.posted}{" "}
+          📍{" "}
+          <Link
+            href={lp(locale, `/place/${slugify(listing.locationName)}`)}
+            className="underline hover:text-navy"
+          >
+            {listing.locationName}
+          </Link>{" "}
+          · {d.listing.posted}{" "}
           {timeAgo(listing.createdAt, d.time)}
           {listing.orgName ? ` · ${listing.orgName}` : ""}
         </p>

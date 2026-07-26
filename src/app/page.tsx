@@ -99,7 +99,7 @@ export default async function Home() {
           {CATEGORY_KEYS.map((k) => (
             <Link
               key={k}
-              href={lp(locale, `/browse?category=${k}`)}
+              href={lp(locale, `/category/${k.toLowerCase()}`)}
               className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm font-semibold text-navy transition-shadow hover:shadow"
             >
               <span className="text-xl" aria-hidden="true">

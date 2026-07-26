@@ -15,7 +15,7 @@ import {
 } from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { locale, d } = await getI18n();
+  const { d } = await getI18n();
   const title = `${SITE_NAME} — ${d.siteTagline}`;
   const images = [
     { url: OG_IMAGE, width: 1200, height: 630, alt: OG_IMAGE_ALT },
