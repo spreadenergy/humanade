@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { getI18n } from "@/lib/i18n";
 import { excerpt, pageMetadata } from "@/lib/page-metadata";
+import { jsonLdScript, listingJsonLd } from "@/lib/structured-data";
 import {
   CategoryBadge,
   StatusBadge,
@@ -55,6 +56,10 @@ export default async function ListingPage({
 
   return (
     <article className="mx-auto max-w-3xl space-y-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(listingJsonLd(listing)) }}
+      />
       <p className="text-sm">
         <Link
           href="/browse"

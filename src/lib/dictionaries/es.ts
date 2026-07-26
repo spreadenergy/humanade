@@ -196,6 +196,8 @@ export const es: Dict = {
     contactRequired:
       "Indica al menos una forma de contacto: teléfono, WhatsApp o correo",
     coordInvalid: "Coordenada inválida",
+    tooMany:
+      "Son muchas publicaciones en poco tiempo. Espera unos minutos y vuelve a intentarlo; no se perdió nada de lo que escribiste.",
     saveFailed:
       "No pudimos guardar tu publicación en este momento. No perdiste nada: todo lo que escribiste sigue aquí. Vuelve a pulsar el botón en unos segundos.",
   },
@@ -280,12 +282,50 @@ export const es: Dict = {
       "✓ Gracias. Recibimos tu reporte y el equipo de moderación revisará esta publicación.",
   },
 
+  privacy: {
+    title: "Privacidad",
+    metaDescription:
+      "Qué hace Humanade con lo que escribes: qué se publica, qué no, cuánto tiempo se guarda y cómo pedir que se borre.",
+    updated: "Última actualización: 26 de julio de 2026.",
+    h1: "En resumen",
+    p1: "Humanade no tiene cuentas y no pide nada más allá de lo que hace falta para publicar. Lo que escribes en el formulario es lo que guardamos, y buena parte se publica a propósito: es así como alguien puede responderte.",
+    publicTitle: "Qué es público",
+    publicIntro:
+      "Todo lo que escribes al publicar aparece en la página de tu publicación, donde cualquiera puede leerlo y los buscadores pueden indexarlo:",
+    publicList:
+      "Qué necesitas u ofreces, los detalles que escribiste, la categoría y la urgencia, el lugar, el marcador en el mapa si lo pusiste, tu nombre, tu organización si la indicaste, y el teléfono, WhatsApp o correo que decidiste compartir.",
+    publicNote:
+      "Los datos de contacto son públicos porque la plataforma no tiene mensajería propia: la gente te contacta directamente. Comparte solo el canal que aceptes que se vea.",
+    privateTitle: "Qué no es público",
+    privateBody:
+      "Tu enlace de gestión. Es lo único que permite editar o cerrar una publicación, no se muestra en ninguna parte del sitio y no se indexa. Trátalo como una contraseña.",
+    keepTitle: "Cuánto tiempo se guarda",
+    keepBody:
+      "Una publicación se mantiene hasta que la cierras o nos pides que la borremos. Al cerrarla deja de aparecer en la búsqueda y en el mapa; al borrarla desaparece de la base de datos.",
+    removeTitle: "Cómo pedir que se borre",
+    removeBody:
+      "Usa tu enlace de gestión para borrarla tú mismo. Si lo perdiste, escríbenos desde el correo con el que publicaste, o danos los datos suficientes para identificar la publicación, y la borramos nosotros.",
+    measureTitle: "Medición",
+    measureBody:
+      "Contamos las visitas a las páginas para saber si las publicaciones se están viendo. La medición no usa cookies, no te sigue entre sitios y no registra quién eres; por eso este sitio no muestra ningún aviso de cookies.",
+    safetyTitle: "Cuídate",
+    safetyBody:
+      "Aquí puede publicar cualquiera y no podemos verificar quién es. Reúnete en lugares públicos cuando puedas, y nunca envíes dinero a alguien que no hayas podido comprobar.",
+    contactTitle: "Dudas",
+    contactBody: "Escríbenos a",
+    aboutLink: "Más sobre Humanade",
+  },
+
   admin: {
     title: "Moderación",
     enterNote:
       "Ingresa la clave de administración configurada en la variable de entorno ADMIN_KEY.",
     keyPh: "Clave de administración",
     enter: "Entrar",
+    wrongKey: "Esa clave no es correcta.",
+    signOut: "Salir",
+    statTotal: "Publicaciones",
+    statResolved: "Resueltas",
     listings: "publicaciones",
     listing: "publicación",
     hidden: "Oculta",

@@ -191,6 +191,8 @@ export const en = {
     contactRequired:
       "Provide at least one way to reach you: phone, WhatsApp, or email",
     coordInvalid: "Invalid coordinate",
+    tooMany:
+      "That is a lot of posts in a short time. Wait a few minutes and try again — nothing you wrote has been lost.",
     saveFailed:
       "We could not save your post just now. Nothing was lost — everything you wrote is still here. Press the button again in a few seconds.",
   },
@@ -273,11 +275,49 @@ export const en = {
       "✓ Thank you. Your report was received and moderators will review this listing.",
   },
 
+  privacy: {
+    title: "Privacy",
+    metaDescription:
+      "What Humanade does with what you write: what is published, what is not, how long it stays and how to have it removed.",
+    updated: "Last updated 26 July 2026.",
+    h1: "The short version",
+    p1: "Humanade has no accounts and asks for nothing beyond what a post needs. What you write in the form is what we hold, and most of it is published on purpose — that is how someone reaches you.",
+    publicTitle: "What is public",
+    publicIntro:
+      "Everything you enter when posting appears on your listing page, where anyone can read it and search engines can index it:",
+    publicList:
+      "What you need or offer, the details you wrote, the category and urgency, the place, an optional map pin, your name, your organisation if you gave one, and the phone, WhatsApp or email you chose to share.",
+    publicNote:
+      "The contact channels are public because the platform has no messaging of its own: people reach you directly. Give only the channel you are willing to have seen.",
+    privateTitle: "What is not public",
+    privateBody:
+      "Your management link. It is the only thing that lets a listing be edited or closed, it is not shown anywhere on the site, and it is not indexed. Treat it as a password.",
+    keepTitle: "How long it stays",
+    keepBody:
+      "A listing stays until you close it or ask us to remove it. Closing it takes it out of browsing and the map; deleting it removes it from the database entirely.",
+    removeTitle: "Having something removed",
+    removeBody:
+      "Use your management link to delete the listing yourself. If you lost it, write to us from the email you posted with, or tell us enough to identify the listing, and we will remove it.",
+    measureTitle: "Measurement",
+    measureBody:
+      "We count page visits to know whether listings are being seen. The measurement uses no cookies, does not follow you between sites and does not record who you are — which is why this site shows no cookie banner.",
+    safetyTitle: "Staying safe",
+    safetyBody:
+      "Anyone can post here, and we cannot verify who they are. Meet in public places when you can, and never send money to someone you have not been able to check.",
+    contactTitle: "Questions",
+    contactBody: "Write to",
+    aboutLink: "More about Humanade",
+  },
+
   admin: {
     title: "Moderation",
     enterNote: "Enter the admin key configured in the ADMIN_KEY environment variable.",
     keyPh: "Admin key",
     enter: "Enter",
+    wrongKey: "That key is not right.",
+    signOut: "Sign out",
+    statTotal: "Total posts",
+    statResolved: "Resolved",
     listings: "listings",
     listing: "listing",
     hidden: "Hidden",

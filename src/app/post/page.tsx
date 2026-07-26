@@ -38,7 +38,7 @@ export default async function PostPage({
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
             href="/post?type=NEED"
-            className="rounded-xl bg-brand-blue p-8 text-white shadow transition-colors hover:bg-brand-blue-dark"
+            className="rounded-xl bg-action-blue p-8 text-white shadow transition-colors hover:bg-action-blue-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.need}</span>
             <span className="mt-1 block text-sm text-blue-50">
@@ -47,7 +47,7 @@ export default async function PostPage({
           </Link>
           <Link
             href="/post?type=OFFER"
-            className="rounded-xl bg-brand-green p-8 text-white shadow transition-colors hover:bg-brand-green-dark"
+            className="rounded-xl bg-action-green p-8 text-white shadow transition-colors hover:bg-action-green-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.offer}</span>
             <span className="mt-1 block text-sm text-green-50">

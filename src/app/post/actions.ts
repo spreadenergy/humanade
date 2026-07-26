@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getI18n } from "@/lib/i18n";
+import { withinLimit } from "@/lib/rate-limit";
 import { parseListingForm } from "@/lib/validation";
 
 export type PostFormState = {
@@ -58,6 +59,13 @@ export async function createListing(
   if (formData.get("website")) redirect("/");
 
   const { d } = await getI18n();
+
+  // Generous on purpose: a family posting several distinct needs in one
+  // sitting is the normal case here, and must not be mistaken for abuse.
+  if (!(await withinLimit({ max: 8, windowMs: 60 * 60 * 1000, scope: "post" }))) {
+    return { formError: d.errors.tooMany, values: typedValues(formData) };
+  }
+
   const parsed = parseListingForm(formData, d.errors);
   if (!parsed.success) {
     const flat = z.flattenError(parsed.error);

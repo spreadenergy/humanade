@@ -4,8 +4,14 @@ import { prisma } from "@/lib/db";
 import { getI18n } from "@/lib/i18n";
 import { StatusBadge, TypeBadge, UrgencyBadge } from "@/components/Badges";
 import { timeAgo } from "@/components/ListingCard";
-import { adminKeyOk } from "@/lib/admin";
-import { adminDelete, dismissReports, toggleHidden } from "./actions";
+import { adminSessionOk } from "@/lib/admin";
+import {
+  adminDelete,
+  dismissReports,
+  signIn,
+  signOut,
+  toggleHidden,
+} from "./actions";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -16,17 +22,20 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ key?: string }>;
+  searchParams: Promise<{ bad?: string }>;
 }) {
-  const { key } = await searchParams;
+  const { bad } = await searchParams;
   const { d } = await getI18n();
 
-  if (!adminKeyOk(key)) {
+  if (!(await adminSessionOk())) {
     return (
       <div className="mx-auto max-w-md space-y-4 pt-8 text-center">
         <h1 className="text-2xl font-extrabold text-navy">{d.admin.title}</h1>
         <p className="text-sm text-slate-500">{d.admin.enterNote}</p>
-        <form method="get" action="/admin" className="flex gap-2">
+        {bad && (
+          <p className="text-sm text-red-600">{d.admin.wrongKey}</p>
+        )}
+        <form action={signIn} className="flex gap-2">
           <input
             type="password"
             name="key"
@@ -42,7 +51,7 @@ export default async function AdminPage({
     );
   }
 
-  const [listings, reported] = await Promise.all([
+  const [listings, reported, byStatus] = await Promise.all([
     prisma.listing.findMany({
       orderBy: { createdAt: "desc" },
       take: 500,
@@ -56,14 +65,48 @@ export default async function AdminPage({
       orderBy: { updatedAt: "desc" },
       take: 100,
     }),
+    // The only number that says whether the platform works: of everything
+    // people asked for, how much actually got resolved.
+    prisma.listing.groupBy({ by: ["status"], _count: { _all: true } }),
   ]);
+
+  const count = (status: string) =>
+    byStatus.find((row) => row.status === status)?._count._all ?? 0;
+  const total = byStatus.reduce((sum, row) => sum + row._count._all, 0);
+  const fulfilled = count("FULFILLED");
+  const resolutionRate = total ? Math.round((fulfilled / total) * 100) : 0;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-extrabold text-navy">
-        {d.admin.title} — {listings.length}{" "}
-        {listings.length === 1 ? d.admin.listing : d.admin.listings}
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-extrabold text-navy">
+          {d.admin.title} — {listings.length}{" "}
+          {listings.length === 1 ? d.admin.listing : d.admin.listings}
+        </h1>
+        <form action={signOut}>
+          <button type="submit" className="btn btn-outline text-sm">
+            {d.admin.signOut}
+          </button>
+        </form>
+      </div>
+
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {[
+          [d.admin.statTotal, total],
+          [d.statuses.OPEN, count("OPEN")],
+          [d.statuses.ASSIGNED, count("ASSIGNED")],
+          [d.statuses.FULFILLED, fulfilled],
+          [d.admin.statResolved, `${resolutionRate}%`],
+        ].map(([label, value]) => (
+          <div
+            key={String(label)}
+            className="rounded-lg border border-slate-200 bg-white p-3"
+          >
+            <dt className="text-xs text-slate-500">{label}</dt>
+            <dd className="text-2xl font-extrabold text-navy">{value}</dd>
+          </div>
+        ))}
+      </dl>
 
       <section className="rounded-lg border border-sun bg-white p-4">
         <h2 className="font-bold text-navy">
@@ -102,7 +145,6 @@ export default async function AdminPage({
                   </p>
                 </div>
                 <form action={toggleHidden}>
-                  <input type="hidden" name="key" value={key} />
                   <input type="hidden" name="id" value={l.id} />
                   <button
                     type="submit"
@@ -112,14 +154,12 @@ export default async function AdminPage({
                   </button>
                 </form>
                 <form action={dismissReports}>
-                  <input type="hidden" name="key" value={key} />
                   <input type="hidden" name="id" value={l.id} />
                   <button type="submit" className="btn btn-navy !py-1.5 text-sm">
                     {d.admin.dismissReports}
                   </button>
                 </form>
                 <form action={adminDelete}>
-                  <input type="hidden" name="key" value={key} />
                   <input type="hidden" name="id" value={l.id} />
                   <button
                     type="submit"
@@ -166,14 +206,12 @@ export default async function AdminPage({
               </p>
             </div>
             <form action={toggleHidden}>
-              <input type="hidden" name="key" value={key} />
               <input type="hidden" name="id" value={l.id} />
               <button type="submit" className="btn btn-outline !py-1.5 text-sm">
                 {l.hidden ? d.admin.unhide : d.admin.hide}
               </button>
             </form>
             <form action={adminDelete}>
-              <input type="hidden" name="key" value={key} />
               <input type="hidden" name="id" value={l.id} />
               <button
                 type="submit"

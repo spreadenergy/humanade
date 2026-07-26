@@ -16,7 +16,7 @@ export function TypeBadge({ type, d }: { type: string; d: Dict }) {
   const label = d.types[type as ListingType];
   if (!label) return null;
   const color =
-    type === "NEED" ? "bg-brand-blue text-white" : "bg-brand-green text-white";
+    type === "NEED" ? "bg-action-blue text-white" : "bg-action-green text-white";
   return <span className={`${base} ${color}`}>{label}</span>;
 }
 

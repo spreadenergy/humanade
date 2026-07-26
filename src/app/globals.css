@@ -7,6 +7,16 @@
   --color-brand-blue-dark: #1f7db8;
   --color-brand-green: #5fae33;
   --color-brand-green-dark: #4c8f27;
+
+  /* The brand blue and green are identity colours: white text on them
+     reads at 3.25 and 2.77, under the 4.5 the guidelines ask for. That
+     matters here more than usual — older people, outdoors, in sunlight.
+     Anything that carries white text uses these instead (6.5 and 5.2);
+     the logo and the map key keep the brand tones. */
+  --color-action-blue: #186394;
+  --color-action-blue-dark: #12507a;
+  --color-action-green: #427a23;
+  --color-action-green-dark: #35631c;
   --color-sun: #f6a800;
   --color-cream: #faf8f3;
   --color-ink: #22303f;
@@ -32,11 +42,11 @@ body {
 }
 
 .btn-blue {
-  @apply bg-brand-blue text-white hover:bg-brand-blue-dark focus:ring-brand-blue;
+  @apply bg-action-blue text-white hover:bg-action-blue-dark focus:ring-action-blue;
 }
 
 .btn-green {
-  @apply bg-brand-green text-white hover:bg-brand-green-dark focus:ring-brand-green;
+  @apply bg-action-green text-white hover:bg-action-green-dark focus:ring-action-green;
 }
 
 .btn-navy {

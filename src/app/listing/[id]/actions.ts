@@ -8,6 +8,7 @@ import {
   REPORT_REASON_KEYS,
   type ReportReason,
 } from "@/lib/constants";
+import { withinLimit } from "@/lib/rate-limit";
 
 export async function reportListing(formData: FormData) {
   // Honeypot: real users never fill this hidden field.
@@ -29,6 +30,25 @@ export async function reportListing(formData: FormData) {
     select: { id: true, hidden: true },
   });
   if (!listing) redirect("/");
+
+  // Enough reports hide a listing automatically, so without a limit one
+  // person could silence any request for help by submitting this form
+  // repeatedly. One report per listing per day, and a ceiling across all
+  // listings so nobody can sweep the board.
+  const allowed =
+    (await withinLimit({
+      max: 1,
+      windowMs: 24 * 60 * 60 * 1000,
+      scope: `report:${listingId}`,
+    })) &&
+    (await withinLimit({
+      max: 10,
+      windowMs: 60 * 60 * 1000,
+      scope: "report",
+    }));
+  // Silently accepted: telling someone their report was rejected only
+  // teaches them how to work around it, and a real reporter is done here.
+  if (!allowed) redirect(`/listing/${listingId}?reported=1`);
 
   await prisma.report.create({ data: { listingId, reason, comment } });
 

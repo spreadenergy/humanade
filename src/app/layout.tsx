@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
+// Cookieless and without personal data, so the site needs no cookie
+// notice — which matters for people who reach it on a borrowed phone.
+import { Analytics } from "@vercel/analytics/next";
 import Link from "next/link";
 import "./globals.css";
 import { LogoMark, LogoWordmark } from "@/components/Logo";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getI18n } from "@/lib/i18n";
 import { OG_IMAGE, OG_IMAGE_ALT } from "@/lib/page-metadata";
+import {
+  jsonLdScript,
+  organizationJsonLd,
+  webSiteJsonLd,
+} from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
@@ -45,6 +53,16 @@ export default async function RootLayout({
   return (
     <html lang={locale} className="h-full">
       <body className="flex min-h-full flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLdScript([
+              organizationJsonLd(d.siteDescription),
+              webSiteJsonLd(),
+            ]),
+          }}
+        />
+        <Analytics />
         <header className="border-b border-slate-200 bg-white">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
             <Link
@@ -101,6 +119,11 @@ export default async function RootLayout({
             <p>
               <span className="font-semibold text-navy">Humanade</span> —{" "}
               {d.siteTagline}
+            </p>
+            <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <Link href="/privacy" className="underline hover:text-navy">
+                {d.privacy.title}
+              </Link>
             </p>
             <p>
               {d.footer.platformOf}{" "}
