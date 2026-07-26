@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { createListing, type PostFormState } from "@/app/post/actions";
 import {
   CATEGORY_ICONS,
@@ -9,6 +9,7 @@ import {
   type ListingType,
 } from "@/lib/constants";
 import type { Dict } from "@/lib/dictionaries/en";
+import { restoreDraft, saveDraft } from "@/lib/draft";
 import { LocationPicker } from "./LocationPicker";
 
 function FieldError({ errors }: { errors?: string[] }) {
@@ -24,9 +25,53 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
   const v = state.values ?? {};
   const e = state.fieldErrors ?? {};
   const isNeed = type === "NEED";
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Bring back anything typed before a reload, and keep saving as they go.
+  useEffect(() => {
+    if (formRef.current) restoreDraft(type, formRef.current);
+  }, [type]);
+
+  // React resets a form once its action finishes, so a submit that came
+  // back with an error quietly undid two choices: the category went back
+  // to "Choose…" and the urgency back to "Normal" — someone marking a need
+  // CRITICAL had it downgraded without being told. These values are what
+  // was just sent, so they overwrite whatever the reset left behind.
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form || !state.values) return;
+    for (const [name, value] of Object.entries(state.values)) {
+      const field = form.elements.namedItem(name) as HTMLInputElement | null;
+      if (field && "value" in field) field.value = value;
+    }
+  }, [state]);
+
+  const [sameWhatsApp, setSameWhatsApp] = useState(false);
+
+  function copyPhoneToWhatsApp() {
+    const form = formRef.current;
+    if (!form) return;
+    const phone = form.elements.namedItem("phone") as HTMLInputElement | null;
+    const wa = form.elements.namedItem("whatsapp") as HTMLInputElement | null;
+    if (phone && wa) wa.value = phone.value;
+  }
+
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function onInput() {
+    if (sameWhatsApp) copyPhoneToWhatsApp();
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      if (formRef.current) saveDraft(type, formRef.current);
+    }, 400);
+  }
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form
+      ref={formRef}
+      action={formAction}
+      onInput={onInput}
+      className="space-y-5"
+    >
       <input type="hidden" name="type" value={type} />
       {/* Honeypot — hidden from humans, tempting for bots */}
       <div className="hidden" aria-hidden="true">
@@ -175,7 +220,11 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
         <legend className="px-1 font-semibold text-navy">
           {d.form.contactLegend}
         </legend>
-        <p className="mb-3 text-sm text-slate-500">{d.form.contactSub}</p>
+        <p className="mb-1 text-sm text-slate-500">{d.form.contactSub}</p>
+        {/* Said before the number is typed, not after the post is sent. */}
+        <p className="mb-3 text-sm font-medium text-navy">
+          {d.form.contactPublicNote}
+        </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label
@@ -189,6 +238,7 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
               name="contactName"
               required
               maxLength={80}
+              autoComplete="name"
               defaultValue={v.contactName}
               className="field"
             />
@@ -208,6 +258,7 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
               id="orgName"
               name="orgName"
               maxLength={120}
+              autoComplete="organization"
               defaultValue={v.orgName}
               placeholder={d.form.orgPh}
               className="field"
@@ -224,6 +275,8 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
               id="phone"
               name="phone"
               type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               maxLength={40}
               defaultValue={v.phone}
               placeholder="+58 412 000 0000"
@@ -242,11 +295,28 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
               id="whatsapp"
               name="whatsapp"
               type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               maxLength={40}
+              readOnly={sameWhatsApp}
               defaultValue={v.whatsapp}
               placeholder="+58 412 000 0000"
-              className="field"
+              className={`field ${sameWhatsApp ? "bg-slate-100 text-slate-500" : ""}`}
             />
+            {/* Here the two are almost always the same number, and typing a
+                Venezuelan mobile twice on a phone is real friction. */}
+            <label className="mt-2 flex items-center gap-2 text-sm text-slate-600">
+              <input
+                type="checkbox"
+                checked={sameWhatsApp}
+                onChange={(ev) => {
+                  setSameWhatsApp(ev.target.checked);
+                  if (ev.target.checked) copyPhoneToWhatsApp();
+                }}
+                className="h-4 w-4 rounded border-slate-300"
+              />
+              {d.form.sameAsPhone}
+            </label>
           </div>
           <div className="sm:col-span-2">
             <label
@@ -259,6 +329,8 @@ export function PostForm({ type, d }: { type: ListingType; d: Dict }) {
               id="email"
               name="email"
               type="email"
+              inputMode="email"
+              autoComplete="email"
               maxLength={160}
               defaultValue={v.email}
               className="field"

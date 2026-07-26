@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { SITE_URL, STATUS_KEYS } from "@/lib/constants";
 import { getI18n } from "@/lib/i18n";
 import { StatusBadge, TypeBadge } from "@/components/Badges";
+import { ClearDraft } from "@/components/ClearDraft";
 import { CopyButton } from "@/components/CopyButton";
 import { ManageEditForm } from "@/components/ManageEditForm";
 import { deleteListing, updateStatus } from "./actions";
@@ -34,6 +35,7 @@ export default async function ManagePage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      {sp.created && <ClearDraft />}
       {sp.created && (
         <div className="rounded-lg border border-brand-green bg-green-50 p-4">
           <h2 className="text-lg font-bold text-brand-green-dark">

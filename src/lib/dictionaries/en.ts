@@ -154,7 +154,11 @@ export const en = {
     location: "Location",
     locationPh: "City, town, neighborhood, or area",
     contactLegend: "Contact",
-    contactSub: "People will contact you directly. Provide at least one channel.",
+    contactSub:
+      "People will contact you directly. At least one is needed: phone, WhatsApp or email.",
+    contactPublicNote:
+      "Whatever you enter here appears on the post so people can reach you.",
+    sameAsPhone: "Same number",
     yourName: "Your name",
     org: "Organization",
     orgPh: "NGO, church, shelter, business…",
@@ -165,7 +169,7 @@ export const en = {
     submitOffer: "Post my offer",
     posting: "Posting…",
     afterNote:
-      "After posting you'll get a private management link to edit, mark fulfilled, or close your listing. Your contact details are shown publicly on the listing so helpers can reach you.",
+      "After posting you'll get a private link to edit your listing, mark it fulfilled, or close it once you no longer need it.",
   },
 
   picker: {
@@ -187,6 +191,8 @@ export const en = {
     contactRequired:
       "Provide at least one way to reach you: phone, WhatsApp, or email",
     coordInvalid: "Invalid coordinate",
+    saveFailed:
+      "We could not save your post just now. Nothing was lost — everything you wrote is still here. Press the button again in a few seconds.",
   },
 
   manage: {

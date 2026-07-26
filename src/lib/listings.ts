@@ -66,25 +66,33 @@ function buildWhere(filters: ListingFilters): Prisma.ListingWhereInput {
   return where;
 }
 
+/**
+ * Urgency first, then newest. It has to be the database that sorts: doing
+ * it afterwards, on one page of results, only reordered the twenty rows
+ * that recency had already chosen, so a CRITICAL need from three days ago
+ * sat on page two while NORMAL ones from today filled page one — the exact
+ * opposite of what this board is for.
+ *
+ * The stored values sort correctly as plain text (CRITICAL < HIGH <
+ * NORMAL), which is why this needs no enum or rank column.
+ */
+const URGENCY_THEN_NEWEST = [
+  { urgency: "asc" as const },
+  { createdAt: "desc" as const },
+];
+
 export async function searchListings(filters: ListingFilters) {
   const where = buildWhere(filters);
   const page = filters.page ?? 1;
   const [items, total] = await Promise.all([
     prisma.listing.findMany({
       where,
-      orderBy: [{ createdAt: "desc" }],
+      orderBy: URGENCY_THEN_NEWEST,
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
     prisma.listing.count({ where }),
   ]);
-  // Surface critical items first within the page.
-  const urgencyRank = { CRITICAL: 0, HIGH: 1, NORMAL: 2 } as const;
-  items.sort(
-    (a, b) =>
-      (urgencyRank[a.urgency as Urgency] ?? 2) -
-      (urgencyRank[b.urgency as Urgency] ?? 2),
-  );
   return { items, total, page, pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE)) };
 }
 
@@ -94,7 +102,9 @@ export async function getMappableListings(filters: ListingFilters) {
   where.lng = { not: null };
   return prisma.listing.findMany({
     where,
-    orderBy: { createdAt: "desc" },
+    // Same order as the list: if the 500 cap ever bites, it must drop the
+    // least urgent pins, not the oldest critical ones.
+    orderBy: URGENCY_THEN_NEWEST,
     take: 500,
     select: {
       id: true,

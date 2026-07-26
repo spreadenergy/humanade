@@ -159,7 +159,11 @@ export const es: Dict = {
     location: "Ubicación",
     locationPh: "Ciudad, pueblo, sector o zona",
     contactLegend: "Contacto",
-    contactSub: "Las personas te contactarán directamente. Indica al menos un canal.",
+    contactSub:
+      "Las personas te contactarán directamente. Hace falta al menos uno: teléfono, WhatsApp o correo.",
+    contactPublicNote:
+      "Lo que escribas aquí se mostrará en la publicación para que puedan responderte.",
+    sameAsPhone: "Es el mismo número",
     yourName: "Tu nombre",
     org: "Organización",
     orgPh: "ONG, iglesia, refugio, negocio…",
@@ -170,7 +174,7 @@ export const es: Dict = {
     submitOffer: "Publicar mi oferta",
     posting: "Publicando…",
     afterNote:
-      "Al publicar recibirás un enlace privado de gestión para editar, marcar como resuelta o cerrar tu publicación. Tus datos de contacto se muestran públicamente para que puedan ayudarte.",
+      "Al publicar recibirás un enlace privado para editar tu publicación, marcarla como resuelta o cerrarla cuando ya no la necesites.",
   },
 
   picker: {
@@ -192,6 +196,8 @@ export const es: Dict = {
     contactRequired:
       "Indica al menos una forma de contacto: teléfono, WhatsApp o correo",
     coordInvalid: "Coordenada inválida",
+    saveFailed:
+      "No pudimos guardar tu publicación en este momento. No perdiste nada: todo lo que escribiste sigue aquí. Vuelve a pulsar el botón en unos segundos.",
   },
 
   manage: {
