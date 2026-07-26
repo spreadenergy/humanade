@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { getI18n } from "@/lib/i18n";
-import { pageMetadata } from "@/lib/page-metadata";
+import { excerpt, pageMetadata } from "@/lib/page-metadata";
 import {
   CategoryBadge,
   StatusBadge,
@@ -31,7 +31,7 @@ export async function generateMetadata({
   if (!listing) return { title: "Not found" };
   return pageMetadata({
     title: listing.title,
-    description: listing.description.slice(0, 160),
+    description: excerpt(listing.description),
     path: `/listing/${listing.id}`,
     type: "article",
   });

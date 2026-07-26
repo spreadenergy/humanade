@@ -8,6 +8,19 @@ export const OG_IMAGE = "/og.png";
 export const OG_IMAGE_ALT =
   "Humanade — Conectando Necesidades Humanas con Soluciones Humanas";
 
+/**
+ * Trims a listing's own words down to card length. Cuts on a space rather
+ * than a character count so the preview never ends mid-word, the way
+ * "…y mat" did.
+ */
+export function excerpt(text: string, max = 160): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[,;:.\-–—]$/, "")}…`;
+}
+
 interface PageMetadataInput {
   /** Shown in the tab and as the headline of the shared card. */
   title: string;
