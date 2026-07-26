@@ -37,10 +37,10 @@ export const STATUS_KEYS = ["OPEN", "ASSIGNED", "FULFILLED", "CLOSED"] as const;
 export type Status = (typeof STATUS_KEYS)[number];
 
 export const STATUS_BADGE_CLASSES: Record<Status, string> = {
-  OPEN: "bg-brand-green text-white",
-  ASSIGNED: "bg-brand-blue text-white",
+  OPEN: "bg-action-green text-white",
+  ASSIGNED: "bg-action-blue text-white",
   FULFILLED: "bg-navy text-white",
-  CLOSED: "bg-slate-400 text-white",
+  CLOSED: "bg-slate-500 text-white",
 };
 
 export const REPORT_REASON_KEYS = [
