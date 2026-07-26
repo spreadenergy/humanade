@@ -3,16 +3,17 @@ import type { Metadata } from "next";
 
 import { RecoverForm } from "@/components/RecoverForm";
 import { emailEnabled } from "@/lib/email";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   return {
     ...pageMetadata({
       title: d.recover.title,
       description: d.recover.metaDescription,
       path: "/manage/recover",
+    locale,
     }),
     // Nothing under /manage belongs in an index.
     robots: { index: false, follow: false },
@@ -22,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const dynamic = "force-dynamic";
 
 export default async function RecoverPage() {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
 
   return (
     <div className="mx-auto max-w-md space-y-6">
@@ -46,7 +47,7 @@ export default async function RecoverPage() {
       <p className="text-sm text-slate-500">{d.recover.onlyEmail}</p>
 
       <p className="text-sm">
-        <Link href="/browse" className="underline hover:text-navy">
+        <Link href={lp(locale, "/browse")} className="underline hover:text-navy">
           {d.listing.back}
         </Link>
       </p>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Listing } from "@prisma/client";
 import type { Dict } from "@/lib/dictionaries/en";
+import { lp, type Locale } from "@/lib/i18n";
 import {
   CategoryBadge,
   StatusBadge,
@@ -22,12 +23,20 @@ export function timeAgo(date: Date, t: Dict["time"]) {
   return `${Math.floor(months / 12)}${t.y}`;
 }
 
-export function ListingCard({ listing, d }: { listing: Listing; d: Dict }) {
+export function ListingCard({
+  listing,
+  d,
+  locale,
+}: {
+  listing: Listing;
+  d: Dict;
+  locale: Locale;
+}) {
   const accent =
     listing.type === "NEED" ? "border-l-brand-blue" : "border-l-brand-green";
   return (
     <Link
-      href={`/listing/${listing.id}`}
+      href={lp(locale, `/listing/${listing.id}`)}
       className={`block rounded-lg border border-slate-200 border-l-4 ${accent} bg-white p-4 shadow-sm transition-shadow hover:shadow-md`}
     >
       <div className="flex flex-wrap items-center gap-1.5">

@@ -6,7 +6,7 @@ import Link from "next/link";
 import "./globals.css";
 import { LogoMark, LogoWordmark } from "@/components/Logo";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
-import { getI18n } from "@/lib/i18n";
+import { getBarePath, getI18n, lp } from "@/lib/i18n";
 import { OG_IMAGE, OG_IMAGE_ALT } from "@/lib/page-metadata";
 import {
   jsonLdScript,
@@ -15,7 +15,7 @@ import {
 } from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const title = `${SITE_NAME} — ${d.siteTagline}`;
   const images = [
     { url: OG_IMAGE, width: 1200, height: 630, alt: OG_IMAGE_ALT },
@@ -49,6 +49,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { locale, d } = await getI18n();
+  const barePath = await getBarePath();
 
   return (
     <html lang={locale} className="h-full">
@@ -66,7 +67,7 @@ export default async function RootLayout({
         <header className="border-b border-slate-200 bg-white">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
             <Link
-              href="/"
+              href={lp(locale, "/")}
               className="flex items-center gap-2"
               aria-label="Humanade"
             >
@@ -79,31 +80,34 @@ export default async function RootLayout({
               </span>
             </Link>
             <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
-              <Link href="/browse" className="hover:text-navy">
+              <Link href={lp(locale, "/browse")} className="hover:text-navy">
                 {d.nav.browse}
               </Link>
-              <Link href="/map" className="hover:text-navy">
+              <Link href={lp(locale, "/map")} className="hover:text-navy">
                 {d.nav.map}
               </Link>
-              <Link href="/about" className="hover:text-navy">
+              <Link href={lp(locale, "/about")} className="hover:text-navy">
                 {d.nav.about}
               </Link>
-              <a
-                href={`/api/locale?lang=${d.lang.switchCode}`}
+              {/* Points at this same page in the other language, so
+                  switching never dumps anyone back on the home page. */}
+              <Link
+                href={lp(locale === "es" ? "en" : "es", barePath)}
+                hrefLang={d.lang.switchCode}
                 className="rounded border border-slate-300 px-1.5 py-0.5 text-xs uppercase hover:text-navy"
               >
                 {d.lang.switchTo}
-              </a>
+              </Link>
             </nav>
             <div className="ms-auto flex items-center gap-2">
               <Link
-                href="/post?type=NEED"
+                href={lp(locale, "/post?type=NEED")}
                 className="btn btn-blue !px-3.5 !py-2 text-sm"
               >
                 {d.cta.need}
               </Link>
               <Link
-                href="/post?type=OFFER"
+                href={lp(locale, "/post?type=OFFER")}
                 className="btn btn-green !px-3.5 !py-2 text-sm"
               >
                 {d.cta.offer}
@@ -121,7 +125,7 @@ export default async function RootLayout({
               {d.siteTagline}
             </p>
             <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              <Link href="/privacy" className="underline hover:text-navy">
+              <Link href={lp(locale, "/privacy")} className="underline hover:text-navy">
                 {d.privacy.title}
               </Link>
             </p>

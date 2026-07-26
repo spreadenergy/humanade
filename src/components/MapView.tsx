@@ -27,9 +27,13 @@ export type MapLabels = {
 export function MapView({
   listings,
   labels,
+  listingBase,
 }: {
   listings: MapListing[];
   labels: MapLabels;
+  /** "" in Spanish, "/en" in English — the map popup must link
+   *  to the listing in the language being read. */
+  listingBase: string;
 }) {
   const mapEl = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -63,7 +67,7 @@ export function MapView({
         marker.bindPopup(
           `<strong>${isNeed ? labels.need : labels.offer}:</strong> ${escapeHtml(l.title)}<br>` +
             `<small>📍 ${escapeHtml(l.locationName)}</small><br>` +
-            `<a href="/listing/${l.id}">${labels.viewListing}</a>`,
+            `<a href="${listingBase}/listing/${l.id}">${labels.viewListing}</a>`,
         );
         bounds.push([l.lat, l.lng]);
       }

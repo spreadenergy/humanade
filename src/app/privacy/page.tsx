@@ -1,15 +1,16 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   return pageMetadata({
     title: d.privacy.title,
     description: d.privacy.metaDescription,
     path: "/privacy",
+    locale,
   });
 }
 
@@ -22,7 +23,7 @@ export const dynamic = "force-dynamic";
  * no more, so it stays true.
  */
 export default async function PrivacyPage() {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const t = d.privacy;
 
   const sections: [string, string[]][] = [
@@ -63,7 +64,7 @@ export default async function PrivacyPage() {
           .
         </p>
         <p className="text-sm text-slate-500">
-          <Link href="/about" className="underline hover:text-navy">
+          <Link href={lp(locale, "/about")} className="underline hover:text-navy">
             {t.aboutLink}
           </Link>
         </p>

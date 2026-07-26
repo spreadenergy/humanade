@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { SITE_URL, STATUS_KEYS } from "@/lib/constants";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { StatusBadge, TypeBadge } from "@/components/Badges";
 import { ClearDraft } from "@/components/ClearDraft";
 import { CopyButton } from "@/components/CopyButton";
@@ -25,7 +25,7 @@ export default async function ManagePage({
 }) {
   const { token } = await params;
   const sp = await searchParams;
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const listing = await prisma.listing.findUnique({
     where: { manageToken: token },
   });
@@ -84,7 +84,7 @@ export default async function ManagePage({
         </div>
         <p className="mt-2 text-sm">
           <Link
-            href={`/listing/${listing.id}`}
+            href={lp(locale, `/listing/${listing.id}`)}
             className="text-slate-500 underline hover:text-navy"
           >
             {d.manage.viewPublic}

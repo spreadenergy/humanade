@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, getLocale, lp } from "@/lib/i18n";
 import { excerpt, pageMetadata } from "@/lib/page-metadata";
 import { jsonLdScript, listingJsonLd } from "@/lib/structured-data";
 import {
@@ -28,12 +28,14 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const locale = await getLocale();
   const listing = await getListing(id);
   if (!listing) return { title: "Not found" };
   return pageMetadata({
     title: listing.title,
     description: excerpt(listing.description),
     path: `/listing/${listing.id}`,
+    locale,
     type: "article",
   });
 }
@@ -47,7 +49,7 @@ export default async function ListingPage({
 }) {
   const { id } = await params;
   const { reported } = await searchParams;
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const listing = await getListing(id);
   if (!listing) notFound();
 
@@ -62,7 +64,7 @@ export default async function ListingPage({
       />
       <p className="text-sm">
         <Link
-          href="/browse"
+          href={lp(locale, "/browse")}
           className="text-slate-500 underline hover:text-navy"
         >
           {d.listing.back}
@@ -89,7 +91,7 @@ export default async function ListingPage({
           {d.listing.resolvedPre}{" "}
           <strong>{d.statuses[listing.status as Status]}</strong>{" "}
           {d.listing.resolvedPost}{" "}
-          <Link href="/browse" className="underline">
+          <Link href={lp(locale, "/browse")} className="underline">
             {d.listing.browseActive}
           </Link>
         </div>
@@ -133,7 +135,7 @@ export default async function ListingPage({
             {d.listing.openOSM}
           </a>{" "}
           ·{" "}
-          <Link href="/map" className="underline hover:text-navy">
+          <Link href={lp(locale, "/map")} className="underline hover:text-navy">
             {d.listing.seeAllMap}
           </Link>
         </p>
@@ -141,7 +143,7 @@ export default async function ListingPage({
 
       <p className="text-xs text-slate-400">
         {d.listing.safety}{" "}
-        <Link href="/manage/recover" className="underline hover:text-navy">
+        <Link href={lp(locale, "/manage/recover")} className="underline hover:text-navy">
           {d.recover.title}
         </Link>
       </p>

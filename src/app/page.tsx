@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { CATEGORY_ICONS, CATEGORY_KEYS } from "@/lib/constants";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { ListingCard } from "@/components/ListingCard";
 import { LogoMark } from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const [urgent, recent, openNeeds, openOffers] = await Promise.all([
     prisma.listing.findMany({
       where: { hidden: false, status: "OPEN", urgency: "CRITICAL" },
@@ -39,7 +39,7 @@ export default async function Home() {
         <p className="mt-3 text-lg text-slate-600">{d.home.heroSub}</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
-            href="/post?type=NEED"
+            href={lp(locale, "/post?type=NEED")}
             className="rounded-xl bg-action-blue p-6 text-white shadow transition-colors hover:bg-action-blue-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.need}</span>
@@ -48,7 +48,7 @@ export default async function Home() {
             </span>
           </Link>
           <Link
-            href="/post?type=OFFER"
+            href={lp(locale, "/post?type=OFFER")}
             className="rounded-xl bg-action-green p-6 text-white shadow transition-colors hover:bg-action-green-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.offer}</span>
@@ -62,11 +62,11 @@ export default async function Home() {
           {openNeeds === 1 ? d.home.openRequest : d.home.openRequests} ·{" "}
           {openOffers} {openOffers === 1 ? d.home.openOffer : d.home.openOffers}{" "}
           ·{" "}
-          <Link href="/browse" className="underline hover:text-navy">
+          <Link href={lp(locale, "/browse")} className="underline hover:text-navy">
             {d.home.browseAllInline}
           </Link>{" "}
           {d.home.orWord}{" "}
-          <Link href="/map" className="underline hover:text-navy">
+          <Link href={lp(locale, "/map")} className="underline hover:text-navy">
             {d.home.viewMapInline}
           </Link>
         </p>
@@ -78,7 +78,7 @@ export default async function Home() {
           <div className="flex items-baseline justify-between">
             <h2 className="text-xl font-bold text-navy">{d.home.criticalNow}</h2>
             <Link
-              href="/browse?urgency=CRITICAL"
+              href={lp(locale, "/browse?urgency=CRITICAL")}
               className="text-sm text-slate-500 underline hover:text-navy"
             >
               {d.home.seeAllCritical}
@@ -86,7 +86,7 @@ export default async function Home() {
           </div>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {urgent.map((l) => (
-              <ListingCard key={l.id} listing={l} d={d} />
+              <ListingCard key={l.id} listing={l} d={d} locale={locale} />
             ))}
           </div>
         </section>
@@ -99,7 +99,7 @@ export default async function Home() {
           {CATEGORY_KEYS.map((k) => (
             <Link
               key={k}
-              href={`/browse?category=${k}`}
+              href={lp(locale, `/browse?category=${k}`)}
               className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm font-semibold text-navy transition-shadow hover:shadow"
             >
               <span className="text-xl" aria-hidden="true">
@@ -116,7 +116,7 @@ export default async function Home() {
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl font-bold text-navy">{d.home.latest}</h2>
           <Link
-            href="/browse"
+            href={lp(locale, "/browse")}
             className="text-sm text-slate-500 underline hover:text-navy"
           >
             {d.home.browseAll}
@@ -124,13 +124,13 @@ export default async function Home() {
         </div>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {recent.map((l) => (
-            <ListingCard key={l.id} listing={l} d={d} />
+            <ListingCard key={l.id} listing={l} d={d} locale={locale} />
           ))}
         </div>
         {recent.length === 0 && (
           <p className="mt-3 text-slate-500">
             {d.home.emptyPre}{" "}
-            <Link href="/post" className="underline">
+            <Link href={lp(locale, "/post")} className="underline">
               {d.home.emptyLink}
             </Link>
             .

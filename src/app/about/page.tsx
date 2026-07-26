@@ -1,21 +1,22 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { LogoMark } from "@/components/Logo";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   return pageMetadata({
     title: d.about.title,
     description: d.about.metaDescription,
     path: "/about",
+    locale,
   });
 }
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="text-center">
@@ -62,7 +63,7 @@ export default async function AboutPage() {
       </div>
 
       <div className="text-center">
-        <Link href="/post" className="btn btn-navy">
+        <Link href={lp(locale, "/post")} className="btn btn-navy">
           {d.about.cta}
         </Link>
       </div>

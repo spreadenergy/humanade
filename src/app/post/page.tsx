@@ -2,15 +2,16 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PostForm } from "@/components/PostForm";
 import { TYPE_KEYS, type ListingType } from "@/lib/constants";
-import { getI18n } from "@/lib/i18n";
+import { getI18n, lp } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   return pageMetadata({
     title: d.post.chooseTitle,
     description: d.post.metaDescription,
     path: "/post",
+    locale,
   });
 }
 
@@ -20,7 +21,7 @@ export default async function PostPage({
   searchParams: Promise<{ type?: string }>;
 }) {
   const { type } = await searchParams;
-  const { d } = await getI18n();
+  const { locale, d } = await getI18n();
   const valid = TYPE_KEYS.includes(type as ListingType)
     ? (type as ListingType)
     : null;
@@ -37,7 +38,7 @@ export default async function PostPage({
         </h1>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
-            href="/post?type=NEED"
+            href={lp(locale, "/post?type=NEED")}
             className="rounded-xl bg-action-blue p-8 text-white shadow transition-colors hover:bg-action-blue-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.need}</span>
@@ -46,7 +47,7 @@ export default async function PostPage({
             </span>
           </Link>
           <Link
-            href="/post?type=OFFER"
+            href={lp(locale, "/post?type=OFFER")}
             className="rounded-xl bg-action-green p-8 text-white shadow transition-colors hover:bg-action-green-dark"
           >
             <span className="block text-2xl font-extrabold">{d.cta.offer}</span>
@@ -78,7 +79,7 @@ export default async function PostPage({
   return (
     <div className="mx-auto max-w-2xl">
       <p className="text-sm">
-        <Link href="/post" className="text-slate-500 underline hover:text-navy">
+        <Link href={lp(locale, "/post")} className="text-slate-500 underline hover:text-navy">
           {d.post.changeType}
         </Link>
       </p>
