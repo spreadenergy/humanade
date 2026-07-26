@@ -84,6 +84,8 @@ export const en = {
 
   browse: {
     title: "Browse listings",
+    metaDescription:
+      "See what people need and what others are offering near you. Filter by category, urgency, and area.",
     results: "results",
     result: "result",
     viewOnMap: "view on map",
@@ -118,6 +120,8 @@ export const en = {
 
   post: {
     chooseTitle: "What would you like to post?",
+    metaDescription:
+      "Post what you need or what you can give. It takes a minute and requires no account.",
     needCardDesc: "Post a request for yourself, your family, or your community.",
     offerCardDesc: "Offer supplies, skills, space, transport, or time.",
     changeType: "← Change type",
@@ -213,6 +217,8 @@ export const en = {
 
   map: {
     title: "Needs & offers map",
+    metaDescription:
+      "Needs and offers placed on a map, so you can find what is being asked for close to you.",
     needs: "Needs",
     offers: "Offers",
     showing: "Showing",
@@ -227,6 +233,8 @@ export const en = {
 
   about: {
     title: "About Humanade",
+    metaDescription:
+      "Humanade is a public board where anyone can ask for help or offer it. No accounts and no campaigns — you post, and people reach you directly.",
     p1strong: "Humanade is the simplest way to ask for help or offer help.",
     p1: "It connects people who need something — water, food, medicine, shelter, transport, a professional, a volunteer — with people, organizations, and businesses who can provide it.",
     p2: "There are no accounts, no feeds, and no fundraising campaigns. You post what you need or what you can give, people contact you directly by phone, WhatsApp, or email, and you close the listing when it's resolved. Think of it as practical infrastructure: a public noticeboard for human needs and human solutions.",

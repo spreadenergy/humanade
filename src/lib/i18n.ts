@@ -13,6 +13,11 @@ export function getDict(locale: Locale): Dict {
 /**
  * Locale resolution: explicit cookie (set by the language switcher) wins;
  * otherwise any Spanish preference in Accept-Language gets Spanish.
+ *
+ * With no Accept-Language at all we answer in Spanish. Every real browser
+ * sends the header, so this case is the WhatsApp and Facebook scrapers,
+ * which send none — and a link pasted into a group in La Guaira was coming
+ * back with an English headline over a Spanish image.
  */
 export async function getLocale(): Promise<Locale> {
   const cookieStore = await cookies();
@@ -21,6 +26,7 @@ export async function getLocale(): Promise<Locale> {
 
   const headerStore = await headers();
   const accept = headerStore.get("accept-language") ?? "";
+  if (!accept.trim()) return "es";
   if (/(^|,|;|\s)es\b/i.test(accept)) return "es";
   return "en";
 }

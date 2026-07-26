@@ -3,11 +3,16 @@ import type { Metadata } from "next";
 import { FilterBar } from "@/components/FilterBar";
 import { ListingCard } from "@/components/ListingCard";
 import { getI18n } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/page-metadata";
 import { normalizeFilters, searchListings } from "@/lib/listings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
-  return { title: d.browse.title };
+  return pageMetadata({
+    title: d.browse.title,
+    description: d.browse.metaDescription,
+    path: "/browse",
+  });
 }
 export const dynamic = "force-dynamic";
 

@@ -2,10 +2,15 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { LogoMark } from "@/components/Logo";
 import { getI18n } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
-  return { title: d.about.title };
+  return pageMetadata({
+    title: d.about.title,
+    description: d.about.metaDescription,
+    path: "/about",
+  });
 }
 export const dynamic = "force-dynamic";
 

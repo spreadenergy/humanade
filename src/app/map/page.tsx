@@ -3,11 +3,16 @@ import type { Metadata } from "next";
 import { FilterBar } from "@/components/FilterBar";
 import { MapView } from "@/components/MapView";
 import { getI18n } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/page-metadata";
 import { getMappableListings, normalizeFilters } from "@/lib/listings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
-  return { title: d.map.title };
+  return pageMetadata({
+    title: d.map.title,
+    description: d.map.metaDescription,
+    path: "/map",
+  });
 }
 export const dynamic = "force-dynamic";
 

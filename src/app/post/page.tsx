@@ -3,10 +3,15 @@ import type { Metadata } from "next";
 import { PostForm } from "@/components/PostForm";
 import { TYPE_KEYS, type ListingType } from "@/lib/constants";
 import { getI18n } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
-  return { title: d.post.chooseTitle };
+  return pageMetadata({
+    title: d.post.chooseTitle,
+    description: d.post.metaDescription,
+    path: "/post",
+  });
 }
 
 export default async function PostPage({

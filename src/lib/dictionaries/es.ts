@@ -89,6 +89,8 @@ export const es: Dict = {
 
   browse: {
     title: "Explorar publicaciones",
+    metaDescription:
+      "Mira qué está haciendo falta y qué está ofreciendo la gente cerca de ti. Puedes filtrar por categoría, urgencia y zona.",
     results: "resultados",
     result: "resultado",
     viewOnMap: "ver en el mapa",
@@ -123,6 +125,8 @@ export const es: Dict = {
 
   post: {
     chooseTitle: "¿Qué quieres publicar?",
+    metaDescription:
+      "Publica lo que necesitas o lo que puedes dar. Toma un minuto y no hace falta crear una cuenta.",
     needCardDesc: "Publica una solicitud para ti, tu familia o tu comunidad.",
     offerCardDesc: "Ofrece insumos, habilidades, espacio, transporte o tiempo.",
     changeType: "← Cambiar tipo",
@@ -220,6 +224,8 @@ export const es: Dict = {
 
   map: {
     title: "Mapa de necesidades y ofertas",
+    metaDescription:
+      "Las necesidades y ofertas publicadas, ubicadas en el mapa, para ver qué está haciendo falta cerca de ti.",
     needs: "Necesidades",
     offers: "Ofertas",
     showing: "Mostrando",
@@ -234,6 +240,8 @@ export const es: Dict = {
 
   about: {
     title: "Acerca de Humanade",
+    metaDescription:
+      "Humanade es una cartelera pública donde cualquiera puede pedir ayuda u ofrecerla. Sin cuentas ni campañas: publicas y te contactan directo.",
     p1strong: "Humanade es la forma más simple de pedir ayuda u ofrecer ayuda.",
     p1: "Conecta a personas que necesitan algo — agua, comida, medicinas, refugio, transporte, un profesional, un voluntario — con personas, organizaciones y negocios que pueden proveerlo.",
     p2: "No hay cuentas, ni muros sociales, ni campañas de recaudación. Publicas lo que necesitas o lo que puedes dar, las personas te contactan directamente por teléfono, WhatsApp o correo, y cierras la publicación cuando se resuelve. Piénsalo como infraestructura práctica: una cartelera pública de necesidades humanas y soluciones humanas.",

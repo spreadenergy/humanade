@@ -4,22 +4,33 @@ import "./globals.css";
 import { LogoMark, LogoWordmark } from "@/components/Logo";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getI18n } from "@/lib/i18n";
+import { OG_IMAGE, OG_IMAGE_ALT } from "@/lib/page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { d } = await getI18n();
+  const title = `${SITE_NAME} — ${d.siteTagline}`;
+  const images = [
+    { url: OG_IMAGE, width: 1200, height: 630, alt: OG_IMAGE_ALT },
+  ];
+
   return {
     metadataBase: new URL(SITE_URL),
-    title: {
-      default: `${SITE_NAME} — ${d.siteTagline}`,
-      template: `%s · ${SITE_NAME}`,
-    },
+    title: { default: title, template: `%s · ${SITE_NAME}` },
     description: d.siteDescription,
+    alternates: { canonical: SITE_URL },
     openGraph: {
       siteName: SITE_NAME,
-      title: `${SITE_NAME} — ${d.siteTagline}`,
+      title,
       description: d.siteDescription,
       url: SITE_URL,
       type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: d.siteDescription,
+      images,
     },
   };
 }
