@@ -10,6 +10,14 @@
  */
 const API = "https://api.resend.com/emails";
 
+/**
+ * Where replies go. The sending domain is ihe.institute — Humanade's
+ * parent, and the one already verified — so without this a reply would
+ * land in a no-reply mailbox nobody reads. Anyone answering one of these
+ * emails is a person who needs help, so it has to reach a human.
+ */
+const DEFAULT_REPLY_TO = process.env.RESEND_REPLY_TO || "help@humanade.org";
+
 function configured() {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
@@ -47,7 +55,7 @@ export async function sendEmail({ to, subject, html, replyTo }: Mail): Promise<b
         to: [headerSafe(to)],
         subject: headerSafe(subject),
         html,
-        ...(replyTo ? { reply_to: headerSafe(replyTo) } : {}),
+        reply_to: headerSafe(replyTo || DEFAULT_REPLY_TO),
       }),
     });
     if (!res.ok) {
