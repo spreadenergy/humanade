@@ -203,6 +203,7 @@ export const es: Dict = {
   },
 
   manage: {
+    alsoEmailed: "También te lo enviamos por correo.",
     managing: "Gestionando tu publicación",
     createdTitle: "🎉 ¡Tu publicación está en línea!",
     createdNote:
@@ -280,6 +281,38 @@ export const es: Dict = {
     submit: "Enviar reporte",
     thanks:
       "✓ Gracias. Recibimos tu reporte y el equipo de moderación revisará esta publicación.",
+  },
+
+  manageEmail: {
+    subject: "Tu publicación en Humanade",
+    heading: "Tu publicación ya está en línea",
+    intro:
+      "Este enlace es la única forma de editarla, marcarla como resuelta o cerrarla cuando ya no la necesites. Nadie más lo tiene.",
+    button: "Gestionar mi publicación",
+    keepIt: "Guarda este correo. Si pierdes el enlace, puedes pedirlo de nuevo desde el sitio.",
+    signature: "Humanade — una plataforma del Institute for Human Evolution",
+  },
+
+  recover: {
+    title: "¿Perdiste tu enlace de gestión?",
+    metaDescription:
+      "Pide de nuevo el enlace privado que te permite editar o cerrar una publicación tuya.",
+    intro:
+      "Escribe el correo con el que publicaste y te enviamos el enlace de cada publicación asociada a él.",
+    emailLabel: "Tu correo",
+    submit: "Envíame mis enlaces",
+    sending: "Enviando…",
+    sentTitle: "Revisa tu correo",
+    sentBody:
+      "Si ese correo tiene publicaciones, los enlaces van en camino. Mira también en la carpeta de spam.",
+    onlyEmail:
+      "Esto solo funciona si dejaste un correo al publicar. Si publicaste solo con teléfono, escribe a help@humanade.org y danos los datos suficientes para identificar tu publicación.",
+    unavailable: "El envío de correo aún no está configurado. Escribe a",
+    emailSubject: "Tus enlaces de gestión en Humanade",
+    emailHeading: "Tus publicaciones",
+    emailIntro:
+      "Con estos enlaces puedes editar, marcar como resuelta o cerrar lo que publicaste. Quien tenga el enlace puede hacerlo, así que no los compartas.",
+    emailFooter: "Humanade — una plataforma del Institute for Human Evolution",
   },
 
   privacy: {

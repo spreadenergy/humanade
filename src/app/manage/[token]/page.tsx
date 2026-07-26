@@ -41,7 +41,10 @@ export default async function ManagePage({
           <h2 className="text-lg font-bold text-brand-green-dark">
             {d.manage.createdTitle}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">{d.manage.createdNote}</p>
+          <p className="mt-1 text-sm text-slate-600">
+            {d.manage.createdNote}
+            {listing.email ? ` ${d.manage.alsoEmailed}` : ""}
+          </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <code className="break-all rounded bg-white px-2 py-1 text-xs text-navy">
               {manageUrl}

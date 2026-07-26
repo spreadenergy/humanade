@@ -139,7 +139,12 @@ export default async function ListingPage({
         </p>
       )}
 
-      <p className="text-xs text-slate-400">{d.listing.safety}</p>
+      <p className="text-xs text-slate-400">
+        {d.listing.safety}{" "}
+        <Link href="/manage/recover" className="underline hover:text-navy">
+          {d.recover.title}
+        </Link>
+      </p>
 
       {reported ? (
         <p className="text-xs text-brand-green-dark">{d.report.thanks}</p>

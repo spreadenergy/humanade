@@ -3,7 +3,9 @@
 import crypto from "node:crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { SITE_URL } from "@/lib/constants";
 import { prisma } from "@/lib/db";
+import { sendManageLink } from "@/lib/email";
 import { getI18n } from "@/lib/i18n";
 import { withinLimit } from "@/lib/rate-limit";
 import { parseListingForm } from "@/lib/validation";
@@ -87,6 +89,18 @@ export async function createListing(
   } catch (err) {
     console.error("[post] listing NOT saved", err);
     return { formError: d.errors.saveFailed, values: typedValues(formData) };
+  }
+
+  // Best effort, and after the listing is safely stored: the link is also
+  // shown on the next screen, so a mail failure costs nothing. When it
+  // works, closing the tab stops being irreversible.
+  if (parsed.data.email) {
+    await sendManageLink({
+      to: parsed.data.email,
+      listingTitle: parsed.data.title,
+      manageUrl: `${SITE_URL}/manage/${manageToken}`,
+      copy: d.manageEmail,
+    });
   }
 
   redirect(`/manage/${manageToken}?created=1`);

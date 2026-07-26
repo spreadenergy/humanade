@@ -198,6 +198,7 @@ export const en = {
   },
 
   manage: {
+    alsoEmailed: "We also sent it to your email.",
     managing: "Managing your listing",
     createdTitle: "🎉 Your listing is live!",
     createdNote:
@@ -273,6 +274,38 @@ export const en = {
     submit: "Send report",
     thanks:
       "✓ Thank you. Your report was received and moderators will review this listing.",
+  },
+
+  manageEmail: {
+    subject: "Your Humanade listing",
+    heading: "Your listing is published",
+    intro:
+      "This link is the only way to edit it, mark it fulfilled, or close it when it is resolved. Nobody else has it.",
+    button: "Manage my listing",
+    keepIt: "Keep this email. If you lose the link you can ask for it again from the site.",
+    signature: "Humanade — a platform of the Institute for Human Evolution",
+  },
+
+  recover: {
+    title: "Lost your management link?",
+    metaDescription:
+      "Ask for the private link that lets you edit or close a listing you posted.",
+    intro:
+      "Enter the email you posted with and we will send the link for every listing tied to it.",
+    emailLabel: "Your email",
+    submit: "Send me my links",
+    sending: "Sending…",
+    sentTitle: "Check your email",
+    sentBody:
+      "If that address has any listings, the links are on their way. Look in spam if you do not see it.",
+    onlyEmail:
+      "This only works if you gave an email when posting. If you posted with a phone number only, write to help@humanade.org and tell us enough to identify the listing.",
+    unavailable: "Email is not set up yet. Write to",
+    emailSubject: "Your Humanade management links",
+    emailHeading: "Your listings",
+    emailIntro:
+      "These links let you edit, mark fulfilled, or close what you posted. Anyone holding a link can do that, so keep them to yourself.",
+    emailFooter: "Humanade — a platform of the Institute for Human Evolution",
   },
 
   privacy: {
