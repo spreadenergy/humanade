@@ -321,6 +321,17 @@ export const en = {
     otherPlaces: "Other places",
   },
 
+  remind: {
+    subject: "Is this still needed?",
+    heading: "Is this still needed?",
+    body:
+      "You posted this two weeks ago. If it has been resolved, closing it takes a moment and keeps people's effort going where it is still needed.",
+    button: "Close or update my listing",
+    stillOpen:
+      "If it is still open, ignore this — the listing stays exactly as it is.",
+    signature: "Humanade — a platform of the Institute for Human Evolution",
+  },
+
   privacy: {
     title: "Privacy",
     metaDescription:

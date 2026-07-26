@@ -328,6 +328,17 @@ export const es: Dict = {
     otherPlaces: "Otras zonas",
   },
 
+  remind: {
+    subject: "¿Sigue haciendo falta?",
+    heading: "¿Sigue haciendo falta?",
+    body:
+      "Publicaste esto hace dos semanas. Si ya se resolvió, cerrarlo toma un momento y hace que el esfuerzo de la gente vaya donde todavía hace falta.",
+    button: "Cerrar o actualizar mi publicación",
+    stillOpen:
+      "Si sigue abierta, ignora este correo: la publicación se queda tal como está.",
+    signature: "Humanade — una plataforma del Institute for Human Evolution",
+  },
+
   privacy: {
     title: "Privacidad",
     metaDescription:
