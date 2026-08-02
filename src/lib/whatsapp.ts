@@ -157,11 +157,11 @@ export const WHATSAPP_NO_LOCATION_MESSAGE = [
 
 export function whatsAppSuccessMessage(listingUrl: string, manageUrl: string) {
   return [
-    "✅ ¡Tu publicación está en línea!",
+    "✅ ¡Publicado!",
     "",
     `Ver: ${listingUrl}`,
     "",
-    `🔒 Enlace privado para editar, marcar como resuelta o eliminar tu publicación (guárdalo y no lo compartas):`,
+    "🔒 Guarda este enlace privado para editar o cerrar tu publicación:",
     manageUrl,
   ].join("\n");
 }

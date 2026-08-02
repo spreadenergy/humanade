@@ -24,22 +24,19 @@ const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 
 const MSG = {
   greeting: [
-    "👋 ¡Hola! Soy el bot de Humanade (humanade.org).",
+    "👋 Hola, soy el bot de Humanade.",
     "",
-    "¿Qué quieres hacer?",
     "1️⃣ Pedir ayuda",
     "2️⃣ Ofrecer ayuda",
-    "",
-    "Responde 1 o 2. Escribe CANCELAR en cualquier momento para empezar de nuevo.",
   ].join("\n"),
-  askNeed: '¿Cuál es la necesidad? Descríbela en un mensaje.\n\nEj: "Agua potable para 30 familias"',
-  askOffer: '¿Qué puedes ofrecer? Descríbelo en un mensaje.\n\nEj: "Camión disponible para traslados"',
-  askWhere: '📍 ¿Dónde? Ciudad o sector.\n\nEj: "La Guaira, Vargas"',
-  askUrgent: "⚠️ ¿Es urgente? Responde SÍ o NO.",
-  askName: "¿Cuál es tu nombre (o el de tu organización)?",
-  canceled: "Publicación cancelada. Escribe HOLA cuando quieras empezar de nuevo.",
-  needTooShort: "Escríbelo con un poco más de detalle, por favor (mínimo unas palabras).",
-  whereTooShort: "Indica la ciudad o el sector, por favor.\n\nEj: \"Catia La Mar, Vargas\"",
+  askNeed: "¿Cuál es la necesidad?",
+  askOffer: "¿Qué puedes ofrecer?",
+  askWhere: "📍 ¿Dónde?",
+  askUrgent: "⚠️ ¿Es urgente? Sí o No",
+  askName: "¿Nombre de la persona u organización a contactar?",
+  canceled: "Cancelado. Escribe HOLA para empezar de nuevo.",
+  needTooShort: "Cuéntame con un poco más de detalle, por favor.",
+  whereTooShort: "¿En qué ciudad o sector?",
 };
 
 async function publish(input: {
@@ -69,8 +66,7 @@ async function publish(input: {
     whatsAppSuccessMessage(
       `${SITE_URL}/listing/${listing.id}`,
       `${SITE_URL}/manage/${manageToken}`,
-    ) +
-    "\n\n📱 Tu número de WhatsApp quedó como contacto. ¿Otra publicación? Escribe HOLA."
+    ) + "\n\n📱 Este WhatsApp quedó como contacto."
   );
 }
 
