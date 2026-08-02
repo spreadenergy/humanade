@@ -62,6 +62,13 @@ function extractLine(lines: string[], names: RegExp): string | null {
   return null;
 }
 
+export function inferCategory(text: string): Category {
+  for (const [cat, re] of CATEGORY_KEYWORDS) {
+    if (re.test(text)) return cat;
+  }
+  return "CONNECT";
+}
+
 export function parseWhatsAppMessage(text: string): WhatsAppParseResult {
   const trimmed = text.trim();
   const firstWord = (trimmed.split(/\s+/)[0] ?? "")

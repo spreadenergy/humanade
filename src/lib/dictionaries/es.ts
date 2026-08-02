@@ -136,7 +136,7 @@ export const es: Dict = {
       "Describe qué puedes aportar. Sé concreto para que la gente sepa exactamente qué pedir.",
     whatsappTitle: "O publica por WhatsApp",
     whatsappDesc:
-      "Envía un mensaje de WhatsApp que empiece con NECESITO u OFREZCO y lo publicamos por ti.",
+      "Envía \"hola\" por WhatsApp y el bot te guía paso a paso — sin formularios ni cuentas.",
     whatsappBtn: "💬 Publicar por WhatsApp",
   },
 

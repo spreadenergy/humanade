@@ -1,15 +1,6 @@
-import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { SITE_URL } from "@/lib/constants";
-import {
-  WHATSAPP_HELP_MESSAGE,
-  WHATSAPP_NO_LOCATION_MESSAGE,
-  parseWhatsAppMessage,
-  sendWhatsAppMessage,
-  verifyWebhookSignature,
-  whatsAppSuccessMessage,
-} from "@/lib/whatsapp";
+import { sendWhatsAppMessage, verifyWebhookSignature } from "@/lib/whatsapp";
+import { advanceConversation } from "@/lib/whatsapp-flow";
 
 export const dynamic = "force-dynamic";
 
@@ -86,35 +77,10 @@ async function handleTextMessage(
   text: string,
   profileName: string | undefined,
 ) {
-  const parsed = parseWhatsAppMessage(text);
-
-  if (!parsed.ok) {
-    await sendWhatsAppMessage(
-      from,
-      parsed.reason === "no_location"
-        ? WHATSAPP_NO_LOCATION_MESSAGE
-        : WHATSAPP_HELP_MESSAGE,
-    );
-    return;
+  try {
+    const reply = await advanceConversation(from, text, profileName);
+    if (reply) await sendWhatsAppMessage(from, reply);
+  } catch (err) {
+    console.error("WhatsApp flow error:", err);
   }
-
-  const manageToken = crypto.randomBytes(18).toString("base64url");
-  const listing = await prisma.listing.create({
-    data: {
-      ...parsed.listing,
-      locationName: parsed.listing.locationName ?? "",
-      contactName:
-        parsed.listing.contactName ?? profileName ?? "WhatsApp",
-      whatsapp: `+${from}`,
-      manageToken,
-    },
-  });
-
-  await sendWhatsAppMessage(
-    from,
-    whatsAppSuccessMessage(
-      `${SITE_URL}/listing/${listing.id}`,
-      `${SITE_URL}/manage/${manageToken}`,
-    ),
-  );
 }

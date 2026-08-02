@@ -131,7 +131,7 @@ export const en = {
       "Describe what you can provide. Keep it concrete so people know exactly what to ask for.",
     whatsappTitle: "Or post via WhatsApp",
     whatsappDesc:
-      "Send a WhatsApp message starting with NECESITO (I need) or OFREZCO (I offer) and we'll publish it for you.",
+      "Send \"hola\" on WhatsApp and the bot guides you step by step — no forms, no account.",
     whatsappBtn: "💬 Post via WhatsApp",
   },
 

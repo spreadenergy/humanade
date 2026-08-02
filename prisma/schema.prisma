@@ -34,6 +34,18 @@ model Listing {
   @@index([createdAt])
 }
 
+// WhatsApp bot conversation state (one active flow per sender).
+model BotSession {
+  waId         String   @id
+  step         String
+  type         String?
+  need         String?
+  locationName String?
+  urgency      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Report {
   id        String   @id @default(cuid())
   listingId String
