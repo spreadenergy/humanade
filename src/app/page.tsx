@@ -57,6 +57,16 @@ export default async function Home() {
             </span>
           </Link>
         </div>
+        {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER && (
+          <a
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER.replace(/[^\d]/g, "")}?text=hola`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-brand-green bg-white px-5 py-2 text-sm font-semibold text-brand-green-dark hover:bg-green-50"
+          >
+            {d.home.whatsappCta}
+          </a>
+        )}
         <p className="mt-4 text-sm text-slate-500">
           {openNeeds}{" "}
           {openNeeds === 1 ? d.home.openRequest : d.home.openRequests} ·{" "}

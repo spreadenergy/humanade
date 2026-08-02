@@ -57,6 +57,7 @@ export const en = {
     browseAll: "Browse all",
     emptyPre: "No listings yet. Be the first to",
     emptyLink: "post a need or an offer",
+    whatsappCta: "💬 Or post via WhatsApp",
     howTitle: "How Humanade works",
     how1t: "Post",
     how1d: "Describe what you need or what you can give, and where. No account, no forms beyond the essentials.",

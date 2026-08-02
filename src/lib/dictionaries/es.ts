@@ -62,6 +62,7 @@ export const es: Dict = {
     browseAll: "Ver todas",
     emptyPre: "Aún no hay publicaciones. Sé la primera persona en",
     emptyLink: "publicar una necesidad o una oferta",
+    whatsappCta: "💬 O publica por WhatsApp",
     howTitle: "Cómo funciona Humanade",
     how1t: "Publica",
     how1d: "Describe qué necesitas o qué puedes dar, y dónde. Sin cuentas ni formularios más allá de lo esencial.",

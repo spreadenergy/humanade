@@ -63,7 +63,7 @@ export default async function PostPage({
             </h2>
             <p className="mt-1 text-sm text-slate-600">{d.post.whatsappDesc}</p>
             <a
-              href={`https://wa.me/${waNumber}?text=${encodeURIComponent("NECESITO ")}`}
+              href={`https://wa.me/${waNumber}?text=hola`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-green mt-4"
