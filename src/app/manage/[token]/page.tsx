@@ -8,6 +8,7 @@ import { StatusBadge, TypeBadge } from "@/components/Badges";
 import { ClearDraft } from "@/components/ClearDraft";
 import { CopyButton } from "@/components/CopyButton";
 import { ManageEditForm } from "@/components/ManageEditForm";
+import { ShareButtons } from "@/components/ShareButtons";
 import { deleteListing, updateStatus } from "./actions";
 
 export const metadata: Metadata = {
@@ -53,6 +54,14 @@ export default async function ManagePage({
               text={manageUrl}
               label={d.manage.copyLink}
               copiedLabel={d.manage.copied}
+            />
+          </div>
+          <div className="mt-3">
+            <ShareButtons
+              url={`${SITE_URL}/listing/${listing.id}`}
+              title={listing.title}
+              cardUrl={`/listing/${listing.id}/card`}
+              labels={d.share}
             />
           </div>
         </div>

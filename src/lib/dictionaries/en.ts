@@ -259,6 +259,11 @@ export const en = {
     cta: "Post a need or an offer",
   },
 
+  share: {
+    share: "📤 Share",
+    image: "🖼 Share image",
+  },
+
   report: {
     flag: "⚑ Report",
     desc: "If this post is false, offensive, spam, or a scam attempt, let us know — moderators will review it.",

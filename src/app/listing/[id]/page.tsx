@@ -14,8 +14,9 @@ import {
 } from "@/components/Badges";
 import { ContactButtons } from "@/components/ContactButtons";
 import { ReportForm } from "@/components/ReportForm";
+import { ShareButtons } from "@/components/ShareButtons";
 import { timeAgo } from "@/components/ListingCard";
-import type { Status } from "@/lib/constants";
+import { SITE_URL, type Status } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export async function generateMetadata({
     path: `/listing/${listing.id}`,
     locale,
     type: "article",
+    image: `/listing/${listing.id}/opengraph`,
   });
 }
 
@@ -132,6 +134,13 @@ export default async function ListingPage({
           <ContactButtons listing={listing} d={d} />
         </section>
       )}
+
+      <ShareButtons
+        url={`${SITE_URL}/listing/${listing.id}`}
+        title={listing.title}
+        cardUrl={`/listing/${listing.id}/card`}
+        labels={d.share}
+      />
 
       {listing.lat != null && listing.lng != null && (
         <p className="text-sm text-slate-500">

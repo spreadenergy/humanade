@@ -266,6 +266,11 @@ export const es: Dict = {
     cta: "Publicar una necesidad o una oferta",
   },
 
+  share: {
+    share: "📤 Compartir",
+    image: "🖼 Imagen para compartir",
+  },
+
   report: {
     flag: "⚑ Reportar",
     desc: "Si esta publicación es falsa, ofensiva, spam o un intento de estafa, avísanos — el equipo de moderación la revisará.",

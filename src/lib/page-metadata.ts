@@ -33,6 +33,9 @@ interface PageMetadataInput {
   /** Which language this rendering is. Spanish is unprefixed. */
   locale: Locale;
   type?: "website" | "article";
+  /** Page-specific share image path (e.g. a listing's own card). Falls
+   *  back to the site-wide artwork. */
+  image?: string;
 }
 
 /**
@@ -63,10 +66,16 @@ export function pageMetadata({
   path,
   locale,
   type = "website",
+  image,
 }: PageMetadataInput): Metadata {
   const url = new URL(lp(locale, path), SITE_URL).toString();
   const images = [
-    { url: OG_IMAGE, width: 1200, height: 630, alt: OG_IMAGE_ALT },
+    {
+      url: image ?? OG_IMAGE,
+      width: 1200,
+      height: 630,
+      alt: image ? title : OG_IMAGE_ALT,
+    },
   ];
 
   return {
