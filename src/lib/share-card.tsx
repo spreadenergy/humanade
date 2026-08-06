@@ -65,6 +65,13 @@ export function listingCard(
     : title.length > 60
       ? 46
       : 56;
+  // The description fills the card body — unless it's just the title
+  // again, which is how quick bot posts come in.
+  const descRaw = listing.description.replace(/\s+/g, " ").trim();
+  const description =
+    descRaw && descRaw !== listing.title.replace(/\s+/g, " ").trim()
+      ? clampText(descRaw, portrait ? 320 : 150)
+      : null;
 
   return (
     <div
@@ -167,11 +174,25 @@ export function listingCard(
         >
           {title}
         </div>
+        {description && (
+          <div
+            style={{
+              display: "flex",
+              fontSize: portrait ? 36 : 28,
+              color: "#475569",
+              lineHeight: 1.4,
+              marginTop: portrait ? 26 : 16,
+            }}
+          >
+            {description}
+          </div>
+        )}
         <div
           style={{
             display: "flex",
             fontSize: portrait ? 38 : 32,
             color: INK,
+            fontWeight: 700,
             marginTop: portrait ? 28 : 18,
           }}
         >
