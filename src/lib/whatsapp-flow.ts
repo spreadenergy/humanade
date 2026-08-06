@@ -29,7 +29,11 @@ const MSG = {
     "",
     "1️⃣ Pedir ayuda",
     "2️⃣ Ofrecer ayuda",
+    "3️⃣ Recibir alertas",
   ].join("\n"),
+  alertsOn:
+    "🔔 Listo. Recibirás por aquí cada nueva publicación.\n\nEscribe PARAR para dejar de recibirlas.",
+  alertsOff: "Listo, ya no recibirás alertas. Escribe ALERTAS para reactivarlas.",
   askNeed: "¿Cuál es la necesidad?",
   askOffer: "¿Qué puedes ofrecer?",
   askWhere: "📍 ¿Dónde?",
@@ -72,6 +76,22 @@ async function publish(input: {
   );
 }
 
+async function subscribeWhatsApp(from: string, profileName?: string) {
+  await prisma.subscriber.upsert({
+    where: { whatsapp: from },
+    create: {
+      name: profileName ?? "WhatsApp",
+      channel: "whatsapp",
+      whatsapp: from,
+      locale: "es",
+      verified: true, // they are literally messaging us
+      active: true,
+      token: crypto.randomBytes(18).toString("base64url"),
+    },
+    update: { active: true, name: profileName ?? undefined },
+  });
+}
+
 export async function advanceConversation(
   from: string,
   text: string,
@@ -82,6 +102,20 @@ export async function advanceConversation(
   if (/^(cancelar|cancel)\.?$/i.test(msg)) {
     await prisma.botSession.deleteMany({ where: { waId: from } });
     return MSG.canceled;
+  }
+
+  // Alert subscription keywords work at any point in a conversation.
+  if (/^(alertas?|suscribirme)\.?$/i.test(msg)) {
+    await subscribeWhatsApp(from, profileName);
+    await prisma.botSession.deleteMany({ where: { waId: from } });
+    return MSG.alertsOn;
+  }
+  if (/^(parar|stop|baja)\.?$/i.test(msg)) {
+    await prisma.subscriber.updateMany({
+      where: { whatsapp: from },
+      data: { active: false },
+    });
+    return MSG.alertsOff;
   }
 
   // Power-user path: full template in one message publishes immediately.
@@ -128,6 +162,11 @@ export async function advanceConversation(
   switch (session.step) {
     case "TYPE": {
       const lower = msg.toLowerCase();
+      if (/^3\b/.test(lower) || /alerta/.test(lower)) {
+        await subscribeWhatsApp(from, profileName);
+        await prisma.botSession.delete({ where: { waId: from } });
+        return MSG.alertsOn;
+      }
       let type: string | null = null;
       if (/^1\b/.test(lower) || /pedir|necesito|ayuda\b.*necesito/.test(lower))
         type = "NEED";

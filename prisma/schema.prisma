@@ -41,7 +41,9 @@ model Subscriber {
   id         String   @id @default(cuid())
   name       String
   orgName    String?
-  email      String   @unique
+  channel    String   @default("email") // email | whatsapp
+  email      String?  @unique
+  whatsapp   String?  @unique // wa_id digits, e.g. 584121234567
   types      String   @default("ALL") // ALL | NEED | OFFER
   categories String   @default("ALL") // "ALL" or comma-separated category keys
   locale     String   @default("es")

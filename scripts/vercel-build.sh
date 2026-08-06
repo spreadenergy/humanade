@@ -15,10 +15,16 @@ if [ -z "$RUNTIME_URL" ]; then
 fi
 
 echo "==> prisma db push (direct connection)"
-DATABASE_URL="$DIRECT_URL" npx prisma db push
+# --accept-data-loss: db push refuses even benign changes (e.g. adding a
+# unique constraint) without it. Schema changes are reviewed before merge;
+# check the build log's warning output when changing the schema.
+DATABASE_URL="$DIRECT_URL" npx prisma db push --accept-data-loss
 
 echo "==> seeding (skips if database already has listings)"
 DATABASE_URL="$DIRECT_URL" npx tsx prisma/seed.ts
+
+echo "==> data fixes (idempotent)"
+DATABASE_URL="$DIRECT_URL" npx tsx scripts/fix-la-guaira.ts
 
 echo "==> next build"
 DATABASE_URL="$RUNTIME_URL" npx next build

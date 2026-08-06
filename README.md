@@ -116,7 +116,7 @@ WhatsApp message — no browser needed.
 
 ```
 NECESITO agua potable para 30 familias
-Dónde: La Guaira, Vargas
+Dónde: La Guaira
 Nombre: María Rivera
 ```
 

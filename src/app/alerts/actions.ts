@@ -89,7 +89,11 @@ export async function subscribe(formData: FormData) {
   });
 
   if (canVerify && !subscriber.verified) {
-    await sendVerificationEmail(subscriber);
+    await sendVerificationEmail({
+      email,
+      token: subscriber.token,
+      locale: subscriber.locale,
+    });
     redirect(`${back}?sent=1`);
   }
   redirect(`${back}?subscribed=1`);

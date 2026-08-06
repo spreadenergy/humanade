@@ -5,7 +5,7 @@ import type { Category, ListingType, Urgency } from "./constants";
  * Parsing for the WhatsApp bot. People post by sending:
  *
  *   NECESITO agua potable para 30 familias
- *   Dónde: La Guaira, Vargas
+ *   Dónde: La Guaira
  *   Nombre: María Rivera
  *
  * or starting with OFREZCO to offer help. English NEED/OFFER also work.
@@ -141,7 +141,7 @@ export const WHATSAPP_HELP_MESSAGE = [
   "Para publicar una *necesidad*, envía un mensaje así:",
   "",
   "NECESITO agua potable para 30 familias",
-  "Dónde: La Guaira, Vargas",
+  "Dónde: La Guaira",
   "Nombre: María Rivera",
   "",
   "Para *ofrecer* ayuda, empieza con OFREZCO.",
@@ -152,7 +152,7 @@ export const WHATSAPP_HELP_MESSAGE = [
 export const WHATSAPP_NO_LOCATION_MESSAGE = [
   "📍 Casi listo — solo falta la ubicación. Agrega una línea así y reenvía tu mensaje completo:",
   "",
-  "Dónde: La Guaira, Vargas",
+  "Dónde: La Guaira",
 ].join("\n");
 
 export function whatsAppSuccessMessage(listingUrl: string, manageUrl: string) {

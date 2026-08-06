@@ -1,6 +1,7 @@
 import type { Listing } from "@prisma/client";
 import { prisma } from "./db";
 import { emailEnabled, sendEmail } from "./email";
+import { sendWhatsAppMessage } from "./whatsapp";
 import { SITE_URL } from "./constants";
 import { getDict } from "./i18n";
 import type { Locale } from "./i18n";
@@ -65,9 +66,21 @@ function bulletinHtml(
   return { subject, html };
 }
 
+/** Short text bulletin for WhatsApp subscribers. */
+function bulletinText(listing: Listing): string {
+  const isNeed = listing.type === "NEED";
+  const urgent = listing.urgency === "CRITICAL";
+  return [
+    `${urgent ? "🔴 URGENTE · " : ""}${isNeed ? "🔵 Necesita ayuda" : "🟢 Puede ayudar"}`,
+    listing.title,
+    `📍 ${listing.locationName}`,
+    `${SITE_URL}/listing/${listing.id}`,
+  ].join("\n");
+}
+
 export async function notifySubscribers(listing: Listing) {
   try {
-    if (!emailEnabled() || listing.hidden) return;
+    if (listing.hidden) return;
     const subscribers = await prisma.subscriber.findMany({
       where: { active: true, verified: true },
       take: 1000,
@@ -79,8 +92,19 @@ export async function notifySubscribers(listing: Listing) {
           s.categories.split(",").includes(listing.category)),
     );
     if (matches.length === 0) return;
+
+    const mailEnabled = emailEnabled();
+    const waEnabled = Boolean(process.env.WHATSAPP_ACCESS_TOKEN);
+    const posterWa = (listing.whatsapp ?? "").replace(/[^\d]/g, "");
+
     await Promise.allSettled(
       matches.map((s) => {
+        if (s.channel === "whatsapp" && s.whatsapp) {
+          // Don't echo someone's own post back at them.
+          if (!waEnabled || s.whatsapp === posterWa) return Promise.resolve();
+          return sendWhatsAppMessage(s.whatsapp, bulletinText(listing));
+        }
+        if (!mailEnabled || !s.email) return Promise.resolve();
         const { subject, html } = bulletinHtml(
           listing,
           (s.locale === "en" ? "en" : "es") as Locale,
