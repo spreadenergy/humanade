@@ -6,6 +6,7 @@ import { z } from "zod";
 import { SITE_URL } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import { sendManageLink } from "@/lib/email";
+import { notifySubscribers } from "@/lib/bulletins";
 import { getI18n } from "@/lib/i18n";
 import { withinLimit } from "@/lib/rate-limit";
 import { parseListingForm } from "@/lib/validation";
@@ -84,12 +85,17 @@ export async function createListing(
   // do anything about. If it does, hand the form back with every word
   // still in it — someone describing a medical emergency on a bad
   // connection must never be asked to type it all again.
+  let listing;
   try {
-    await createWithRetry({ ...parsed.data, manageToken });
+    listing = await createWithRetry({ ...parsed.data, manageToken });
   } catch (err) {
     console.error("[post] listing NOT saved", err);
     return { formError: d.errors.saveFailed, values: typedValues(formData) };
   }
+
+  // Real-time bulletins to subscribed organizations — best effort,
+  // after the listing is safely stored.
+  await notifySubscribers(listing);
 
   // Best effort, and after the listing is safely stored: the link is also
   // shown on the next screen, so a mail failure costs nothing. When it

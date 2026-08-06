@@ -264,6 +264,49 @@ export const en = {
     image: "🖼 Share image",
   },
 
+  alerts: {
+    title: "Real-time alerts",
+    metaDescription:
+      "Organizations and volunteers can receive every new Humanade listing by email, in real time, and respond fast.",
+    intro:
+      "For organizations and people who can help: get an email the moment a new listing goes live, so resources reach the scene fast.",
+    name: "Name",
+    org: "Organization",
+    email: "Email",
+    typeLabel: "What do you want to receive?",
+    typeAll: "Everything",
+    typeNeed: "Needs only",
+    typeOffer: "Offers only",
+    catLabel: "Categories",
+    catAllNote: "Leave all unchecked to receive every category.",
+    submit: "Subscribe",
+    sent: "✓ Check your email and confirm your subscription.",
+    subscribed: "✓ Subscribed. You'll start receiving alerts.",
+    confirmed: "✓ Subscription confirmed. Alerts are on.",
+    unsubscribed: "Subscription cancelled.",
+    invalid: "Check the name and email.",
+    homeTitle: "🔔 Are you an organization or want to help?",
+    homeDesc:
+      "Receive every new listing by email in real time and respond immediately.",
+    homeCta: "Get alerts",
+    footerLink: "Alerts",
+  },
+
+  alertEmail: {
+    verifySubject: "Confirm your Humanade alerts",
+    verifyHeading: "Confirm your subscription",
+    verifyIntro:
+      "Tap the button to start receiving new Humanade listings by email, in real time.",
+    verifyButton: "Confirm subscription",
+    ignore: "If you didn't request this, ignore this email.",
+    needLabel: "NEEDS HELP",
+    offerLabel: "CAN HELP",
+    urgent: "URGENT",
+    view: "View and contact",
+    reason: "You're receiving this because you subscribed to Humanade alerts.",
+    unsubscribe: "Unsubscribe",
+  },
+
   report: {
     flag: "⚑ Report",
     desc: "If this post is false, offensive, spam, or a scam attempt, let us know — moderators will review it.",

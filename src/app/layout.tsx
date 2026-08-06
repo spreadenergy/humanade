@@ -125,6 +125,9 @@ export default async function RootLayout({
               {d.siteTagline}
             </p>
             <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <Link href={lp(locale, "/alerts")} className="underline hover:text-navy">
+                🔔 {d.alerts.footerLink}
+              </Link>
               <Link href={lp(locale, "/privacy")} className="underline hover:text-navy">
                 {d.privacy.title}
               </Link>

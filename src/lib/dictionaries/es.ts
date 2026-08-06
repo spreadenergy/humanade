@@ -271,6 +271,49 @@ export const es: Dict = {
     image: "🖼 Imagen para compartir",
   },
 
+  alerts: {
+    title: "Alertas en tiempo real",
+    metaDescription:
+      "Organizaciones y voluntarios pueden recibir cada nueva publicación de Humanade por correo, en tiempo real, y responder rápido.",
+    intro:
+      "Para organizaciones y personas que pueden ayudar: recibe un correo en el momento en que se publica algo nuevo, para que los recursos lleguen rápido.",
+    name: "Nombre",
+    org: "Organización",
+    email: "Correo",
+    typeLabel: "¿Qué quieres recibir?",
+    typeAll: "Todo",
+    typeNeed: "Solo necesidades",
+    typeOffer: "Solo ofertas",
+    catLabel: "Categorías",
+    catAllNote: "Deja todas sin marcar para recibir todas las categorías.",
+    submit: "Suscribirme",
+    sent: "✓ Revisa tu correo y confirma tu suscripción.",
+    subscribed: "✓ Suscripción activa. Empezarás a recibir alertas.",
+    confirmed: "✓ Suscripción confirmada. Las alertas están activas.",
+    unsubscribed: "Suscripción cancelada.",
+    invalid: "Revisa el nombre y el correo.",
+    homeTitle: "🔔 ¿Eres una organización o quieres ayudar?",
+    homeDesc:
+      "Recibe cada nueva publicación por correo en tiempo real y responde de inmediato.",
+    homeCta: "Recibir alertas",
+    footerLink: "Alertas",
+  },
+
+  alertEmail: {
+    verifySubject: "Confirma tus alertas de Humanade",
+    verifyHeading: "Confirma tu suscripción",
+    verifyIntro:
+      "Toca el botón para empezar a recibir por correo las nuevas publicaciones de Humanade, en tiempo real.",
+    verifyButton: "Confirmar suscripción",
+    ignore: "Si no solicitaste esto, ignora este correo.",
+    needLabel: "NECESITA AYUDA",
+    offerLabel: "PUEDE AYUDAR",
+    urgent: "URGENTE",
+    view: "Ver y contactar",
+    reason: "Recibes este correo porque te suscribiste a las alertas de Humanade.",
+    unsubscribe: "Cancelar suscripción",
+  },
+
   report: {
     flag: "⚑ Reportar",
     desc: "Si esta publicación es falsa, ofensiva, spam o un intento de estafa, avísanos — el equipo de moderación la revisará.",

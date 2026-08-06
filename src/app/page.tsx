@@ -167,6 +167,17 @@ export default async function Home() {
           ))}
         </ol>
       </section>
+
+      {/* Alerts for organizations */}
+      <section className="rounded-xl border border-slate-200 bg-white p-6 text-center sm:p-8">
+        <h2 className="text-xl font-bold text-navy">{d.alerts.homeTitle}</h2>
+        <p className="mx-auto mt-2 max-w-xl text-slate-600">
+          {d.alerts.homeDesc}
+        </p>
+        <Link href={lp(locale, "/alerts")} className="btn btn-navy mt-4">
+          {d.alerts.homeCta}
+        </Link>
+      </section>
     </div>
   );
 }

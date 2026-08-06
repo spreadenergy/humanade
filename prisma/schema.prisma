@@ -34,6 +34,24 @@ model Listing {
   @@index([createdAt])
 }
 
+// Organizations and people who receive an email the moment a matching
+// listing goes live. One token serves both the confirm and unsubscribe
+// links.
+model Subscriber {
+  id         String   @id @default(cuid())
+  name       String
+  orgName    String?
+  email      String   @unique
+  types      String   @default("ALL") // ALL | NEED | OFFER
+  categories String   @default("ALL") // "ALL" or comma-separated category keys
+  locale     String   @default("es")
+  verified   Boolean  @default(false)
+  active     Boolean  @default(true)
+  token      String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 // WhatsApp bot conversation state (one active flow per sender).
 model BotSession {
   waId         String   @id

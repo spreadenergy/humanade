@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { prisma } from "./db";
 import { SITE_URL } from "./constants";
+import { notifySubscribers } from "./bulletins";
 import {
   inferCategory,
   parseWhatsAppMessage,
@@ -62,6 +63,7 @@ async function publish(input: {
       manageToken,
     },
   });
+  await notifySubscribers(listing);
   return (
     whatsAppSuccessMessage(
       `${SITE_URL}/listing/${listing.id}`,
