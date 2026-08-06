@@ -290,6 +290,9 @@ export const en = {
       "Receive every new listing by email in real time and respond immediately.",
     homeCta: "Get alerts",
     footerLink: "Alerts",
+    waTitle: "Prefer WhatsApp?",
+    waDesc: "Send ALERTAS to our bot and you'll receive every new listing on WhatsApp. Send PARAR to stop.",
+    waBtn: "💬 Enable via WhatsApp",
   },
 
   alertEmail: {

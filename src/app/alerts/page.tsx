@@ -117,6 +117,21 @@ export default async function AlertsPage({
           {d.alerts.submit}
         </button>
       </form>
+
+      {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER && (
+        <div className="rounded-lg border border-brand-green bg-white p-5">
+          <h2 className="font-bold text-navy">{d.alerts.waTitle}</h2>
+          <p className="mt-1 text-sm text-slate-600">{d.alerts.waDesc}</p>
+          <a
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER.replace(/[^\d]/g, "")}?text=ALERTAS`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-green mt-3"
+          >
+            {d.alerts.waBtn}
+          </a>
+        </div>
+      )}
     </div>
   );
 }

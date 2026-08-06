@@ -297,6 +297,9 @@ export const es: Dict = {
       "Recibe cada nueva publicación por correo en tiempo real y responde de inmediato.",
     homeCta: "Recibir alertas",
     footerLink: "Alertas",
+    waTitle: "¿Prefieres WhatsApp?",
+    waDesc: "Envía ALERTAS a nuestro bot y recibirás cada nueva publicación por WhatsApp. Envía PARAR para cancelar.",
+    waBtn: "💬 Activar por WhatsApp",
   },
 
   alertEmail: {
